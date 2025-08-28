@@ -4,13 +4,19 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { MapPin, Lock, CheckCircle } from "lucide-react";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Calendar } from "@/components/ui/calendar";
+import { format } from "date-fns";
+import { MapPin, Lock, CheckCircle, CalendarIcon } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface AddressData {
   street: string;
+  apartment: string;
   city: string;
   state: string;
   zipCode: string;
+  moveDate: Date | undefined;
 }
 
 interface AddressInputProps {
@@ -29,21 +35,24 @@ const US_STATES = [
 export const AddressInput = ({ onAddressSubmit, isLocked }: AddressInputProps) => {
   const [addressData, setAddressData] = useState<AddressData>({
     street: "",
+    apartment: "",
     city: "",
     state: "",
-    zipCode: ""
+    zipCode: "",
+    moveDate: undefined
   });
   const [fullAddress, setFullAddress] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
 
-  const updateAddressField = (field: keyof AddressData, value: string) => {
+  const updateAddressField = (field: keyof AddressData, value: string | Date | undefined) => {
     const newAddressData = { ...addressData, [field]: value };
     setAddressData(newAddressData);
     
     // Update full address string
-    const { street, city, state, zipCode } = newAddressData;
+    const { street, apartment, city, state, zipCode } = newAddressData;
     if (street && city && state && zipCode) {
-      setFullAddress(`${street}, ${city}, ${state} ${zipCode}`);
+      const apt = apartment ? `, ${apartment}` : '';
+      setFullAddress(`${street}${apt}, ${city}, ${state} ${zipCode}`);
     }
   };
 
@@ -51,7 +60,8 @@ export const AddressInput = ({ onAddressSubmit, isLocked }: AddressInputProps) =
     return addressData.street.trim() && 
            addressData.city.trim() && 
            addressData.state && 
-           addressData.zipCode.trim();
+           addressData.zipCode.trim() &&
+           addressData.moveDate;
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -63,29 +73,23 @@ export const AddressInput = ({ onAddressSubmit, isLocked }: AddressInputProps) =
   };
 
   return (
-    <Card className="w-full max-w-2xl mx-auto shadow-card border-0 bg-card">
+    <Card className="w-full max-w-4xl mx-auto shadow-sm border bg-card">
       <CardContent className="p-8">
-        <div className="text-center mb-6">
-          <div className="flex justify-center mb-4">
+        <div className="mb-8">
+          <div className="flex items-center gap-3 mb-4">
             {isLocked ? (
-              <div className="p-3 bg-success-light rounded-full">
-                <CheckCircle className="h-6 w-6 text-success" />
+              <div className="p-2 bg-success-light rounded-full">
+                <CheckCircle className="h-5 w-5 text-success" />
               </div>
             ) : (
-              <div className="p-3 bg-primary-light rounded-full">
-                <MapPin className="h-6 w-6 text-primary" />
+              <div className="p-2 bg-primary-light rounded-full">
+                <MapPin className="h-5 w-5 text-primary" />
               </div>
             )}
+            <h2 className="text-xl font-semibold text-foreground">
+              {isLocked ? "Address Confirmed" : "New Address Information"}
+            </h2>
           </div>
-          <h2 className="text-2xl font-semibold text-foreground mb-2">
-            {isLocked ? "Address Confirmed" : "Enter Your New Address"}
-          </h2>
-          <p className="text-muted-foreground">
-            {isLocked 
-              ? "Your address is locked and secure. Now let's update your services."
-              : "We'll help you update your address across all your important services"
-            }
-          </p>
         </div>
 
         {isLocked ? (
@@ -102,7 +106,7 @@ export const AddressInput = ({ onAddressSubmit, isLocked }: AddressInputProps) =
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="space-y-6">
-            <div className="grid grid-cols-1 gap-4">
+            <div className="space-y-6">
               {/* Street Address */}
               <div className="space-y-2">
                 <Label htmlFor="street" className="text-sm font-medium text-foreground">
@@ -111,16 +115,31 @@ export const AddressInput = ({ onAddressSubmit, isLocked }: AddressInputProps) =
                 <Input
                   id="street"
                   type="text"
-                  placeholder="123 Main Street, Apt 4B"
+                  placeholder="123 Main Street"
                   value={addressData.street}
                   onChange={(e) => updateAddressField('street', e.target.value)}
-                  className="h-12 text-lg border-border focus:ring-primary focus:border-primary"
+                  className="h-11 border-border"
                   disabled={isSubmitted}
                 />
               </div>
 
-              {/* City and State Row */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {/* Apartment/Suite and City Row */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="apartment" className="text-sm font-medium text-foreground">
+                    Apartment / Suite (Optional)
+                  </Label>
+                  <Input
+                    id="apartment"
+                    type="text"
+                    placeholder="Apt 4B"
+                    value={addressData.apartment}
+                    onChange={(e) => updateAddressField('apartment', e.target.value)}
+                    className="h-11 border-border"
+                    disabled={isSubmitted}
+                  />
+                </div>
+
                 <div className="space-y-2">
                   <Label htmlFor="city" className="text-sm font-medium text-foreground">
                     City
@@ -131,11 +150,15 @@ export const AddressInput = ({ onAddressSubmit, isLocked }: AddressInputProps) =
                     placeholder="San Francisco"
                     value={addressData.city}
                     onChange={(e) => updateAddressField('city', e.target.value)}
-                    className="h-12 text-lg border-border focus:ring-primary focus:border-primary"
+                    className="h-11 border-border"
                     disabled={isSubmitted}
                   />
                 </div>
 
+              </div>
+
+              {/* State and ZIP Code Row */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="state" className="text-sm font-medium text-foreground">
                     State
@@ -145,8 +168,8 @@ export const AddressInput = ({ onAddressSubmit, isLocked }: AddressInputProps) =
                     onValueChange={(value) => updateAddressField('state', value)}
                     disabled={isSubmitted}
                   >
-                    <SelectTrigger className="h-12 text-lg border-border focus:ring-primary focus:border-primary">
-                      <SelectValue placeholder="Select state" />
+                    <SelectTrigger className="h-11 border-border">
+                      <SelectValue placeholder="CA" />
                     </SelectTrigger>
                     <SelectContent>
                       {US_STATES.map((state) => (
@@ -157,41 +180,64 @@ export const AddressInput = ({ onAddressSubmit, isLocked }: AddressInputProps) =
                     </SelectContent>
                   </Select>
                 </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="zipCode" className="text-sm font-medium text-foreground">
+                    ZIP Code
+                  </Label>
+                  <Input
+                    id="zipCode"
+                    type="text"
+                    placeholder="94105"
+                    value={addressData.zipCode}
+                    onChange={(e) => updateAddressField('zipCode', e.target.value)}
+                    className="h-11 border-border"
+                    disabled={isSubmitted}
+                    maxLength={5}
+                  />
+                </div>
               </div>
 
-              {/* ZIP Code */}
+              {/* Move Date */}
               <div className="space-y-2">
-                <Label htmlFor="zipCode" className="text-sm font-medium text-foreground">
-                  ZIP Code
+                <Label className="text-sm font-medium text-foreground">
+                  Move Date
                 </Label>
-                <Input
-                  id="zipCode"
-                  type="text"
-                  placeholder="94105"
-                  value={addressData.zipCode}
-                  onChange={(e) => updateAddressField('zipCode', e.target.value)}
-                  className="h-12 text-lg border-border focus:ring-primary focus:border-primary"
-                  disabled={isSubmitted}
-                  maxLength={5}
-                />
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      className={cn(
+                        "h-11 w-full justify-start text-left font-normal border-border",
+                        !addressData.moveDate && "text-muted-foreground"
+                      )}
+                      disabled={isSubmitted}
+                    >
+                      <CalendarIcon className="mr-2 h-4 w-4" />
+                      {addressData.moveDate ? format(addressData.moveDate, "PPP") : <span>mm/dd/yyyy</span>}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0" align="start">
+                    <Calendar
+                      mode="single"
+                      selected={addressData.moveDate}
+                      onSelect={(date) => updateAddressField('moveDate', date)}
+                      initialFocus
+                      className="p-3 pointer-events-auto"
+                    />
+                  </PopoverContent>
+                </Popover>
               </div>
             </div>
 
             <Button 
               type="submit" 
-              variant="primary"
-              size="lg"
-              className="w-full h-12"
+              variant="default"
+              className="w-auto px-8 h-11"
               disabled={!isFormValid() || isSubmitted}
             >
-              {isSubmitted ? "Processing..." : "Lock in My Address"}
+              {isSubmitted ? "Processing..." : "Confirm Address"}
             </Button>
-
-            <div className="text-center">
-              <p className="text-xs text-muted-foreground">
-                🔒 Your information is encrypted and secure
-              </p>
-            </div>
           </form>
         )}
       </CardContent>

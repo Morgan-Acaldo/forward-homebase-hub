@@ -16,94 +16,60 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-subtle">
+    <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="border-b border-border bg-card/50 backdrop-blur-sm sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <header className="border-b border-border bg-background">
+        <div className="max-w-7xl mx-auto px-6">
           <div className="flex items-center justify-between h-16">
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 bg-gradient-primary rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-sm">F</span>
+            <div className="flex items-center gap-8">
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
+                  <span className="text-white font-bold text-sm">F</span>
+                </div>
+                <h1 className="text-xl font-bold text-foreground">Forward</h1>
               </div>
-              <h1 className="text-xl font-bold text-foreground">Forward</h1>
+              <nav className="hidden md:flex items-center gap-6">
+                <a href="#" className="text-sm font-medium text-foreground border-b-2 border-primary pb-1">Dashboard</a>
+                <a href="#" className="text-sm text-muted-foreground hover:text-foreground">Services</a>
+                <a href="#" className="text-sm text-muted-foreground hover:text-foreground">Documents</a>
+                <a href="#" className="text-sm text-muted-foreground hover:text-foreground">Support</a>
+              </nav>
             </div>
-            <div className="flex items-center gap-2 text-sm text-muted-foreground">
-              <div className="w-2 h-2 bg-success rounded-full"></div>
-              <span>Secure & Encrypted</span>
+            <div className="flex items-center gap-4">
+              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                <div className="w-2 h-2 bg-success rounded-full"></div>
+                <span>Secure</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 bg-muted rounded-full flex items-center justify-center">
+                  <span className="text-xs font-medium">M</span>
+                </div>
+                <span className="text-sm text-muted-foreground">morgan.acaido@gmail.com</span>
+              </div>
             </div>
           </div>
         </div>
       </header>
 
-      {/* Hero Section */}
-      <section className="relative py-16 lg:py-24 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-hero opacity-10"></div>
-        <div 
-          className="absolute inset-0 bg-cover bg-center opacity-5"
-          style={{ backgroundImage: `url(${heroImage})` }}
-        />
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-4xl lg:text-6xl font-bold text-foreground mb-6">
-            Simplify Your Move with{" "}
-            <span className="bg-gradient-primary bg-clip-text text-transparent">
-              Forward
-            </span>
-          </h1>
-          <p className="text-xl lg:text-2xl text-muted-foreground mb-12 max-w-3xl mx-auto">
-            Update your address across all your important services in one place. 
-            Secure, fast, and hassle-free address management when you move.
-          </p>
-          
+      {/* Main Content */}
+      <main className="max-w-7xl mx-auto px-6 py-8">
+        {/* Page Header */}
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-foreground mb-2">Address Management Center</h1>
+          <p className="text-muted-foreground">Securely update your address across all your services</p>
+        </div>
+
+        {/* Address Form */}
+        <div className="mb-12">
           <AddressInput 
             onAddressSubmit={handleAddressSubmit}
             isLocked={isAddressLocked}
           />
         </div>
-      </section>
 
-      {/* Services Section */}
-      <section className="py-16 lg:py-24">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <ServiceGrid isAddressLocked={isAddressLocked} />
-        </div>
-      </section>
-
-      {/* Trust Section */}
-      <section className="py-16 border-t border-border bg-card/30">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-2xl font-semibold text-foreground mb-8">
-            Trusted by thousands of movers
-          </h2>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-            <div>
-              <div className="text-3xl font-bold text-primary mb-2">256-bit</div>
-              <div className="text-sm text-muted-foreground">SSL Encryption</div>
-            </div>
-            <div>
-              <div className="text-3xl font-bold text-primary mb-2">50+</div>
-              <div className="text-sm text-muted-foreground">Supported Services</div>
-            </div>
-            <div>
-              <div className="text-3xl font-bold text-primary mb-2">99.9%</div>
-              <div className="text-sm text-muted-foreground">Uptime</div>
-            </div>
-            <div>
-              <div className="text-3xl font-bold text-primary mb-2">24/7</div>
-              <div className="text-sm text-muted-foreground">Support</div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Footer */}
-      <footer className="border-t border-border bg-card py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center text-muted-foreground">
-            <p>&copy; 2024 Forward. All rights reserved.</p>
-            <p className="mt-2 text-sm">Making moves easier, one address at a time.</p>
-          </div>
-        </div>
-      </footer>
+        {/* Services Section */}
+        <ServiceGrid isAddressLocked={isAddressLocked} />
+      </main>
     </div>
   );
 };
