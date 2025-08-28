@@ -57,21 +57,21 @@ export const ServiceCard = ({ category, isEnabled, delay }: ServiceCardProps) =>
         return {
           bg: "bg-success-light",
           text: "text-success",
-          border: "border-success/20",
+          border: "border-success/10",
           button: "success"
         };
       case "warning":
         return {
           bg: "bg-warning-light", 
           text: "text-warning",
-          border: "border-warning/20",
+          border: "border-warning/10",
           button: "warning"
         };
       default:
         return {
-          bg: "bg-primary-light",
-          text: "text-primary", 
-          border: "border-primary/20",
+          bg: "bg-muted",
+          text: "text-muted-foreground", 
+          border: "border-border",
           button: "primary"
         };
     }

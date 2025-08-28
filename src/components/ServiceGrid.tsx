@@ -84,12 +84,12 @@ interface ServiceGridProps {
 
 export const ServiceGrid = ({ isAddressLocked }: ServiceGridProps) => {
   return (
-    <div className="w-full max-w-6xl mx-auto">
+    <div className="w-full max-w-5xl mx-auto">
       <div className="text-center mb-8">
-        <h2 className="text-3xl font-bold text-foreground mb-4">
+        <h2 className="text-2xl font-semibold text-foreground mb-3">
           Update Your Services
         </h2>
-        <p className="text-lg text-muted-foreground">
+        <p className="text-muted-foreground">
           {isAddressLocked 
             ? "Select the services you'd like to update with your new address"
             : "Lock in your address above to start updating these services"
@@ -109,10 +109,10 @@ export const ServiceGrid = ({ isAddressLocked }: ServiceGridProps) => {
       </div>
 
       {isAddressLocked && (
-        <div className="mt-8 text-center">
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary-light rounded-full">
-            <div className="w-2 h-2 bg-primary rounded-full animate-pulse"></div>
-            <span className="text-sm font-medium text-primary">
+        <div className="mt-6 text-center">
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-muted rounded-full">
+            <div className="w-1.5 h-1.5 bg-foreground rounded-full animate-pulse"></div>
+            <span className="text-xs font-medium text-muted-foreground">
               Ready to update services
             </span>
           </div>

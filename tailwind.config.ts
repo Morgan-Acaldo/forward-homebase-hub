@@ -83,7 +83,6 @@ export default {
 				'gradient-primary': 'var(--gradient-primary)',
 				'gradient-success': 'var(--gradient-success)',
 				'gradient-subtle': 'var(--gradient-subtle)',
-				'gradient-hero': 'var(--gradient-hero)',
 			},
 			boxShadow: {
 				'sm': 'var(--shadow-sm)',
