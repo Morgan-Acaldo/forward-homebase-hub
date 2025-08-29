@@ -38,6 +38,8 @@ const AdditionalInfo = () => {
     phone: { isLocked: true, isEditing: false },
     internet: { isLocked: true, isEditing: false },
     water: { isLocked: true, isEditing: false },
+    irs: { isLocked: true, isEditing: false },
+    statetax: { isLocked: true, isEditing: false },
     emergency: { isLocked: true, isEditing: false }
   });
 
@@ -702,6 +704,150 @@ const AdditionalInfo = () => {
                     Save Changes
                   </Button>
                   <Button variant="outline" onClick={() => toggleEdit("water")}>Cancel</Button>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+
+          {/* IRS Information */}
+          <Card className="border-border">
+            {renderSectionHeader(
+              "irs", 
+              "IRS Information", 
+              "Tax identification and IRS-related documentation",
+              <FileText className="w-5 h-5 text-red-600" />
+            )}
+            <CardContent className="space-y-6">
+              <div className="grid md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="ein">Employer Identification Number (EIN)</Label>
+                  <Input 
+                    id="ein" 
+                    placeholder="XX-XXXXXXX" 
+                    disabled={sections.irs.isLocked || !sections.irs.isEditing}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="taxId">Tax ID / ITIN</Label>
+                  <Input 
+                    id="taxId" 
+                    placeholder="Enter Tax ID or ITIN" 
+                    disabled={sections.irs.isLocked || !sections.irs.isEditing}
+                  />
+                </div>
+              </div>
+              <div className="space-y-2">
+                <Label>Upload IRS Document Photo</Label>
+                <div className="border-2 border-dashed border-border rounded-lg p-4">
+                  <div className="flex flex-col items-center gap-2">
+                    <Camera className="w-8 h-8 text-muted-foreground" />
+                    <p className="text-sm text-muted-foreground text-center">
+                      Upload or take a photo of your IRS documents for automatic data extraction
+                    </p>
+                    <label className="cursor-pointer">
+                      <input
+                        type="file"
+                        accept="image/*"
+                        capture="environment"
+                        onChange={(e) => handleFileUpload("irs", e)}
+                        className="hidden"
+                        disabled={sections.irs.isLocked}
+                      />
+                      <Button 
+                        type="button" 
+                        variant="outline" 
+                        size="sm"
+                        disabled={sections.irs.isLocked}
+                        asChild
+                      >
+                        <span>
+                          <Upload className="w-4 h-4 mr-2" />
+                          Choose Photo
+                        </span>
+                      </Button>
+                    </label>
+                  </div>
+                </div>
+              </div>
+              {sections.irs.isEditing && (
+                <div className="flex gap-2">
+                  <Button onClick={() => saveSection("irs")}>
+                    <Save className="w-4 h-4 mr-2" />
+                    Save Changes
+                  </Button>
+                  <Button variant="outline" onClick={() => toggleEdit("irs")}>Cancel</Button>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+
+          {/* State Tax Board Information */}
+          <Card className="border-border">
+            {renderSectionHeader(
+              "statetax", 
+              "State Tax Board", 
+              "State tax board registration and documentation",
+              <Building className="w-5 h-5 text-purple-600" />
+            )}
+            <CardContent className="space-y-6">
+              <div className="grid md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="stateRegistration">State Registration Number</Label>
+                  <Input 
+                    id="stateRegistration" 
+                    placeholder="Enter state registration number" 
+                    disabled={sections.statetax.isLocked || !sections.statetax.isEditing}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="taxBoardState">State</Label>
+                  <Input 
+                    id="taxBoardState" 
+                    placeholder="e.g., TX, CA, NY" 
+                    disabled={sections.statetax.isLocked || !sections.statetax.isEditing}
+                  />
+                </div>
+              </div>
+              <div className="space-y-2">
+                <Label>Upload State Tax Document Photo</Label>
+                <div className="border-2 border-dashed border-border rounded-lg p-4">
+                  <div className="flex flex-col items-center gap-2">
+                    <Camera className="w-8 h-8 text-muted-foreground" />
+                    <p className="text-sm text-muted-foreground text-center">
+                      Upload or take a photo of your state tax documents for automatic data extraction
+                    </p>
+                    <label className="cursor-pointer">
+                      <input
+                        type="file"
+                        accept="image/*"
+                        capture="environment"
+                        onChange={(e) => handleFileUpload("statetax", e)}
+                        className="hidden"
+                        disabled={sections.statetax.isLocked}
+                      />
+                      <Button 
+                        type="button" 
+                        variant="outline" 
+                        size="sm"
+                        disabled={sections.statetax.isLocked}
+                        asChild
+                      >
+                        <span>
+                          <Upload className="w-4 h-4 mr-2" />
+                          Choose Photo
+                        </span>
+                      </Button>
+                    </label>
+                  </div>
+                </div>
+              </div>
+              {sections.statetax.isEditing && (
+                <div className="flex gap-2">
+                  <Button onClick={() => saveSection("statetax")}>
+                    <Save className="w-4 h-4 mr-2" />
+                    Save Changes
+                  </Button>
+                  <Button variant="outline" onClick={() => toggleEdit("statetax")}>Cancel</Button>
                 </div>
               )}
             </CardContent>
