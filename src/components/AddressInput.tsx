@@ -61,11 +61,11 @@ export const AddressInput = ({ onAddressSubmit, isLocked }: AddressInputProps) =
   };
 
   const updateNewAddressField = (field: keyof AddressData, value: string | Date | undefined) => {
-    setNewAddress(prev => ({ ...prev, [field]: value }));
+    const updatedAddress = { ...newAddress, [field]: value };
+    setNewAddress(updatedAddress);
     
     // Update full address string
-    const newAddressData = { ...newAddress, [field]: value };
-    const { street, apartment, city, state, zipCode } = newAddressData;
+    const { street, apartment, city, state, zipCode } = updatedAddress;
     if (street && city && state && zipCode) {
       const apt = apartment ? `, ${apartment}` : '';
       setFullAddress(`${street}${apt}, ${city}, ${state} ${zipCode}`);
