@@ -376,6 +376,10 @@ const Account = () => {
                 <Download className="w-4 h-4 mr-2" />
                 Download Your Data
               </Button>
+              <Button variant="outline" className="w-full justify-start">
+                <Trash2 className="w-4 h-4 mr-2" />
+                Delete Your Data
+              </Button>
               <Button variant="destructive" className="w-full justify-start">
                 <Trash2 className="w-4 h-4 mr-2" />
                 Delete Account
