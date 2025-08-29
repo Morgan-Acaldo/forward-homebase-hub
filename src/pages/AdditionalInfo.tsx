@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -20,12 +20,20 @@ import {
   Wifi,
   Droplets,
   Camera,
-  Upload
+  Upload,
+  Building2
 } from "lucide-react";
 
 interface SectionState {
   isLocked: boolean;
   isEditing: boolean;
+}
+
+interface OfficeInfo {
+  name: string;
+  address: string;
+  phone: string;
+  distance: string;
 }
 
 const AdditionalInfo = () => {
@@ -42,6 +50,84 @@ const AdditionalInfo = () => {
     statetax: { isLocked: true, isEditing: false },
     emergency: { isLocked: true, isEditing: false }
   });
+
+  const [newAddress] = useState("123 Oak Street, Austin, TX 78701"); // Mock new address
+  const [officeLocations, setOfficeLocations] = useState<Record<string, OfficeInfo | null>>({
+    gas: null,
+    electric: null,
+    phone: null,
+    internet: null,
+    water: null,
+    irs: null,
+    statetax: null
+  });
+
+  // Mock function to find nearest office based on service type and address
+  const findNearestOffice = (serviceType: string, address: string): OfficeInfo => {
+    const mockOffices: Record<string, OfficeInfo> = {
+      gas: {
+        name: "Texas Gas Service - Austin Office",
+        address: "1601 Lamar Blvd, Austin, TX 78701",
+        phone: "(512) 370-8243",
+        distance: "2.3 miles"
+      },
+      electric: {
+        name: "Austin Energy Customer Service",
+        address: "721 Barton Springs Rd, Austin, TX 78704",
+        phone: "(512) 494-9400",
+        distance: "1.8 miles"
+      },
+      phone: {
+        name: "AT&T Store - Downtown Austin",
+        address: "308 Congress Ave, Austin, TX 78701",
+        phone: "(512) 474-0500",
+        distance: "0.9 miles"
+      },
+      internet: {
+        name: "Spectrum Store - Austin Central",
+        address: "2525 W Anderson Ln, Austin, TX 78757",
+        phone: "(833) 267-6094",
+        distance: "4.2 miles"
+      },
+      water: {
+        name: "Austin Water Utility Customer Service",
+        address: "625 E 10th St, Austin, TX 78701",
+        phone: "(512) 972-0101",
+        distance: "1.2 miles"
+      },
+      irs: {
+        name: "IRS Taxpayer Assistance Center",
+        address: "300 E 8th St, Austin, TX 78701",
+        phone: "(844) 545-5640",
+        distance: "0.7 miles"
+      },
+      statetax: {
+        name: "Texas Comptroller Field Office",
+        address: "111 E 17th St, Austin, TX 78774",
+        phone: "(512) 463-4600",
+        distance: "1.5 miles"
+      }
+    };
+    
+    return mockOffices[serviceType] || {
+      name: "Office Location Not Found",
+      address: "Please contact service provider",
+      phone: "N/A",
+      distance: "N/A"
+    };
+  };
+
+  // Load office locations on component mount
+  useEffect(() => {
+    const serviceTypes = ['gas', 'electric', 'phone', 'internet', 'water', 'irs', 'statetax'];
+    const newOfficeLocations: Record<string, OfficeInfo | null> = {};
+    
+    serviceTypes.forEach(serviceType => {
+      newOfficeLocations[serviceType] = findNearestOffice(serviceType, newAddress);
+    });
+    
+    setOfficeLocations(newOfficeLocations);
+  }, [newAddress]);
 
   const handleFileUpload = (sectionId: string, event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -120,6 +206,45 @@ const AdditionalInfo = () => {
           )}
         </div>
       </CardHeader>
+    );
+  };
+
+  const renderOfficeInfo = (serviceType: string) => {
+    const office = officeLocations[serviceType];
+    
+    if (!office) {
+      return (
+        <div className="bg-muted/50 rounded-lg p-4">
+          <div className="flex items-center gap-2 text-muted-foreground">
+            <Building2 className="w-4 h-4" />
+            <span className="text-sm">Loading nearest office...</span>
+          </div>
+        </div>
+      );
+    }
+
+    return (
+      <div className="bg-muted/50 rounded-lg p-4 space-y-2">
+        <div className="flex items-start justify-between">
+          <div className="flex items-center gap-2 text-foreground">
+            <Building2 className="w-4 h-4 mt-0.5" />
+            <div>
+              <p className="font-medium text-sm">{office.name}</p>
+              <p className="text-xs text-muted-foreground">{office.distance} from new address</p>
+            </div>
+          </div>
+        </div>
+        <div className="space-y-1 text-xs text-muted-foreground">
+          <div className="flex items-center gap-2">
+            <MapPin className="w-3 h-3" />
+            <span>{office.address}</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <Phone className="w-3 h-3" />
+            <span>{office.phone}</span>
+          </div>
+        </div>
+      </div>
     );
   };
 
@@ -409,6 +534,10 @@ const AdditionalInfo = () => {
                   </div>
                 </div>
               </div>
+              <div className="space-y-2">
+                <Label>Nearest Gas Office</Label>
+                {renderOfficeInfo("gas")}
+              </div>
               {sections.gas.isEditing && (
                 <div className="flex gap-2">
                   <Button onClick={() => saveSection("gas")}>
@@ -480,6 +609,10 @@ const AdditionalInfo = () => {
                     </label>
                   </div>
                 </div>
+              </div>
+              <div className="space-y-2">
+                <Label>Nearest Electric Office</Label>
+                {renderOfficeInfo("electric")}
               </div>
               {sections.electric.isEditing && (
                 <div className="flex gap-2">
@@ -553,6 +686,10 @@ const AdditionalInfo = () => {
                   </div>
                 </div>
               </div>
+              <div className="space-y-2">
+                <Label>Nearest Phone Office</Label>
+                {renderOfficeInfo("phone")}
+              </div>
               {sections.phone.isEditing && (
                 <div className="flex gap-2">
                   <Button onClick={() => saveSection("phone")}>
@@ -624,6 +761,10 @@ const AdditionalInfo = () => {
                     </label>
                   </div>
                 </div>
+              </div>
+              <div className="space-y-2">
+                <Label>Nearest Internet Office</Label>
+                {renderOfficeInfo("internet")}
               </div>
               {sections.internet.isEditing && (
                 <div className="flex gap-2">
@@ -697,6 +838,10 @@ const AdditionalInfo = () => {
                   </div>
                 </div>
               </div>
+              <div className="space-y-2">
+                <Label>Nearest Water Office</Label>
+                {renderOfficeInfo("water")}
+              </div>
               {sections.water.isEditing && (
                 <div className="flex gap-2">
                   <Button onClick={() => saveSection("water")}>
@@ -769,6 +914,10 @@ const AdditionalInfo = () => {
                   </div>
                 </div>
               </div>
+              <div className="space-y-2">
+                <Label>Nearest IRS Office</Label>
+                {renderOfficeInfo("irs")}
+              </div>
               {sections.irs.isEditing && (
                 <div className="flex gap-2">
                   <Button onClick={() => saveSection("irs")}>
@@ -840,6 +989,10 @@ const AdditionalInfo = () => {
                     </label>
                   </div>
                 </div>
+              </div>
+              <div className="space-y-2">
+                <Label>Nearest State Tax Office</Label>
+                {renderOfficeInfo("statetax")}
               </div>
               {sections.statetax.isEditing && (
                 <div className="flex gap-2">
