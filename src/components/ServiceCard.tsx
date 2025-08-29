@@ -155,7 +155,7 @@ export const ServiceCard = ({ category, isEnabled, delay }: ServiceCardProps) =>
               return (
                 <div
                   key={service.name}
-                  className="flex items-center justify-between p-3 bg-muted/30 rounded-lg hover:bg-muted/50 transition-colors"
+                  className="flex items-center justify-between p-4 bg-muted/30 rounded-lg hover:bg-muted/50 transition-colors border"
                 >
                   <div className="flex items-center gap-3">
                     <service.icon className="h-4 w-4 text-muted-foreground" />
@@ -164,7 +164,7 @@ export const ServiceCard = ({ category, isEnabled, delay }: ServiceCardProps) =>
                     </span>
                   </div>
                   
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2 flex-shrink-0">
                     <Button
                       variant="outline"
                       size="sm"
@@ -172,7 +172,7 @@ export const ServiceCard = ({ category, isEnabled, delay }: ServiceCardProps) =>
                         e.stopPropagation();
                         handleFormClick(service.name);
                       }}
-                      className="text-xs"
+                      className="text-xs px-3 py-1"
                     >
                       <FileText className="h-3 w-3 mr-1" />
                       Form
@@ -185,14 +185,14 @@ export const ServiceCard = ({ category, isEnabled, delay }: ServiceCardProps) =>
                         e.stopPropagation();
                         handleAutomateClick(service.name);
                       }}
-                      className="text-xs"
+                      className="text-xs px-3 py-1"
                     >
                       <Zap className="h-3 w-3 mr-1" />
                       Automate
                     </Button>
 
                     {isCompleted ? (
-                      <Badge variant="secondary" className="bg-success-light text-success">
+                      <Badge variant="secondary" className="bg-success-light text-success px-2 py-1">
                         <CheckCircle className="h-3 w-3 mr-1" />
                         Updated
                       </Badge>
@@ -200,8 +200,11 @@ export const ServiceCard = ({ category, isEnabled, delay }: ServiceCardProps) =>
                       <Button
                         variant="outline"
                         size="sm"
-                        onClick={() => handleServiceUpdate(service.name)}
-                        className="text-xs"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleServiceUpdate(service.name);
+                        }}
+                        className="text-xs px-3 py-1"
                       >
                         Update
                         <ArrowRight className="h-3 w-3 ml-1" />
