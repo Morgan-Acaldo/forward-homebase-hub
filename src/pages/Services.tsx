@@ -26,7 +26,7 @@ const Services = () => {
       id: "tier1",
       name: "Form Generation",
       tier: "Tier 1",
-      price: "Free",
+      price: "$9 one time",
       description: "Generate address change forms and letters for manual submission",
       icon: <FileText className="w-8 h-8" />,
       color: "bg-blue-500",
@@ -46,7 +46,7 @@ const Services = () => {
       id: "tier2", 
       name: "Guided Automation",
       tier: "Tier 2",
-      price: "$19/month",
+      price: "$19 one time",
       description: "Hybrid automation with guided assistance for complex services",
       icon: <Zap className="w-8 h-8" />,
       color: "bg-primary",
@@ -69,7 +69,7 @@ const Services = () => {
       name: "Full Automation", 
       tier: "Tier 3",
       price: "$49/month",
-      description: "Complete hands-off automation for all your address changes",
+      description: "Complete hands-off automation for frequent movers or businesses",
       icon: <Bot className="w-8 h-8" />,
       color: "bg-gradient-to-r from-purple-500 to-pink-500",
       features: [
@@ -176,7 +176,7 @@ const Services = () => {
                 </div>
                 <div className="text-3xl font-bold text-foreground mb-2">
                   {tier.price}
-                  {tier.price !== "Free" && <span className="text-lg text-muted-foreground">/month</span>}
+                  {tier.price.includes("/month") && <span className="text-lg text-muted-foreground"> - Frequent movers or businesses</span>}
                 </div>
                 <CardDescription className="text-center">{tier.description}</CardDescription>
               </CardHeader>
@@ -211,7 +211,7 @@ const Services = () => {
                   variant={tier.popular ? "default" : "outline"}
                   size="lg"
                 >
-                  {tier.price === "Free" ? "Get Started" : "Choose Plan"}
+                  {tier.price.includes("one time") ? "One-Time Purchase" : "Choose Plan"}
                   <ArrowRight className="w-4 h-4 ml-2" />
                 </Button>
               </CardContent>
