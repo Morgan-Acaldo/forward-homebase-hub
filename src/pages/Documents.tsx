@@ -127,8 +127,8 @@ const Documents = () => {
               <nav className="hidden md:flex items-center gap-6">
                 <a href="/" className="text-sm text-muted-foreground hover:text-foreground">Dashboard</a>
                 <a href="#" className="text-sm text-muted-foreground hover:text-foreground">Services</a>
-                <a href="#" className="text-sm font-medium text-foreground border-b-2 border-primary pb-1">Documents</a>
-                <a href="#" className="text-sm text-muted-foreground hover:text-foreground">Support</a>
+                <a href="/documents" className="text-sm font-medium text-foreground border-b-2 border-primary pb-1">Documents</a>
+                <a href="/support" className="text-sm text-muted-foreground hover:text-foreground">Support</a>
               </nav>
             </div>
             <div className="flex items-center gap-4">

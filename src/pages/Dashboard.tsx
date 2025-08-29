@@ -32,7 +32,7 @@ const Dashboard = () => {
                 <a href="/" className="text-sm font-medium text-foreground border-b-2 border-primary pb-1">Dashboard</a>
                 <a href="#" className="text-sm text-muted-foreground hover:text-foreground">Services</a>
                 <a href="/documents" className="text-sm text-muted-foreground hover:text-foreground">Documents</a>
-                <a href="#" className="text-sm text-muted-foreground hover:text-foreground">Support</a>
+                <a href="/support" className="text-sm text-muted-foreground hover:text-foreground">Support</a>
               </nav>
             </div>
             <div className="flex items-center gap-4">
