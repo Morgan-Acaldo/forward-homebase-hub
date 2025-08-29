@@ -13,7 +13,9 @@ import {
   Search,
   Check,
   Clock,
-  CheckCircle
+  CheckCircle,
+  FileText,
+  Zap
 } from "lucide-react";
 
 const serviceCategories = [
@@ -105,6 +107,16 @@ export const ServiceGrid = ({ isAddressLocked }: ServiceGridProps) => {
     return <Clock className="h-4 w-4 text-orange-600" />;
   };
 
+  const handleFormClick = (serviceName: string) => {
+    console.log(`Opening form for ${serviceName}`);
+    // Handle form functionality here
+  };
+
+  const handleAutomateClick = (serviceName: string) => {
+    console.log(`Setting up automation for ${serviceName}`);
+    // Handle automation functionality here
+  };
+
   return (
     <div className="w-full space-y-8">
       {/* Search Bar */}
@@ -152,13 +164,41 @@ export const ServiceGrid = ({ isAddressLocked }: ServiceGridProps) => {
                 <CollapsibleContent>
                   <div className="px-4 pb-4 space-y-3">
                     {category.services.map((service) => (
-                      <div key={service.name} className="flex items-center justify-between py-2 px-3 rounded-md hover:bg-muted/50">
-                        <div className="flex items-center gap-3">
-                          {getStatusIcon(service.status)}
-                          <span className="text-sm font-medium text-foreground">{service.name}</span>
-                        </div>
-                        {getStatusBadge(service.status)}
-                      </div>
+                       <div key={service.name} className="flex items-center justify-between py-2 px-3 rounded-md hover:bg-muted/50">
+                         <div className="flex items-center gap-3">
+                           {getStatusIcon(service.status)}
+                           <span className="text-sm font-medium text-foreground">{service.name}</span>
+                         </div>
+                         <div className="flex items-center gap-2">
+                           <Button
+                             variant="outline"
+                             size="sm"
+                             onClick={(e) => {
+                               e.stopPropagation();
+                               handleFormClick(service.name);
+                             }}
+                             className="text-xs px-2 py-1"
+                           >
+                             <FileText className="h-3 w-3 mr-1" />
+                             Form
+                           </Button>
+                           
+                           <Button
+                             variant="outline"
+                             size="sm"
+                             onClick={(e) => {
+                               e.stopPropagation();
+                               handleAutomateClick(service.name);
+                             }}
+                             className="text-xs px-2 py-1"
+                           >
+                             <Zap className="h-3 w-3 mr-1" />
+                             Automate
+                           </Button>
+                           
+                           {getStatusBadge(service.status)}
+                         </div>
+                       </div>
                     ))}
                   </div>
                 </CollapsibleContent>
