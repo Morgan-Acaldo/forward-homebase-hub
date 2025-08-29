@@ -144,106 +144,6 @@ export const AddressInput = ({ onAddressSubmit, isLocked }: AddressInputProps) =
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="space-y-8">
-            {/* Old Address Section */}
-            <div className="space-y-4">
-              <h3 className="text-lg font-medium text-foreground border-b border-border pb-2">
-                Previous Address
-              </h3>
-              <div className="space-y-4 p-4 bg-muted/30 rounded-lg">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label className="text-sm font-medium text-foreground">Address Type</Label>
-                    <Select
-                      value={oldAddress.addressType}
-                      onValueChange={(value: 'residential' | 'mailing') => updateOldAddressField('addressType', value)}
-                      disabled={isSubmitted}
-                    >
-                      <SelectTrigger className="h-11 border-border">
-                        <SelectValue placeholder="Select type" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="residential">Residential</SelectItem>
-                        <SelectItem value="mailing">Mailing</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                </div>
-                
-                <div className="space-y-2">
-                  <Label className="text-sm font-medium text-foreground">Street Address</Label>
-                  <Input
-                    type="text"
-                    placeholder="123 Old Street"
-                    value={oldAddress.street}
-                    onChange={(e) => updateOldAddressField('street', e.target.value)}
-                    className="h-11 border-border"
-                    disabled={isSubmitted}
-                  />
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div className="space-y-2">
-                    <Label className="text-sm font-medium text-foreground">
-                      Apartment / Suite (Optional)
-                    </Label>
-                    <Input
-                      type="text"
-                      placeholder="Apt 1A"
-                      value={oldAddress.apartment}
-                      onChange={(e) => updateOldAddressField('apartment', e.target.value)}
-                      className="h-11 border-border"
-                      disabled={isSubmitted}
-                    />
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label className="text-sm font-medium text-foreground">City</Label>
-                    <Input
-                      type="text"
-                      placeholder="Previous City"
-                      value={oldAddress.city}
-                      onChange={(e) => updateOldAddressField('city', e.target.value)}
-                      className="h-11 border-border"
-                      disabled={isSubmitted}
-                    />
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label className="text-sm font-medium text-foreground">ZIP Code</Label>
-                    <Input
-                      type="text"
-                      placeholder="12345"
-                      value={oldAddress.zipCode}
-                      onChange={(e) => updateOldAddressField('zipCode', e.target.value)}
-                      className="h-11 border-border"
-                      disabled={isSubmitted}
-                      maxLength={5}
-                    />
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <Label className="text-sm font-medium text-foreground">State</Label>
-                  <Select
-                    value={oldAddress.state}
-                    onValueChange={(value) => updateOldAddressField('state', value)}
-                    disabled={isSubmitted}
-                  >
-                    <SelectTrigger className="h-11 border-border">
-                      <SelectValue placeholder="Select state" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {US_STATES.map((state) => (
-                        <SelectItem key={state} value={state}>
-                          {state}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-            </div>
-
             {/* New Address Section (Main Form) */}
             <div className="space-y-4">
               <h3 className="text-lg font-medium text-foreground border-b border-border pb-2">
@@ -368,6 +268,106 @@ export const AddressInput = ({ onAddressSubmit, isLocked }: AddressInputProps) =
                       />
                     </PopoverContent>
                   </Popover>
+                </div>
+              </div>
+            </div>
+
+            {/* Previous Address Section */}
+            <div className="space-y-4">
+              <h3 className="text-lg font-medium text-foreground border-b border-border pb-2">
+                Previous Address
+              </h3>
+              <div className="space-y-4 p-4 bg-muted/30 rounded-lg">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label className="text-sm font-medium text-foreground">Address Type</Label>
+                    <Select
+                      value={oldAddress.addressType}
+                      onValueChange={(value: 'residential' | 'mailing') => updateOldAddressField('addressType', value)}
+                      disabled={isSubmitted}
+                    >
+                      <SelectTrigger className="h-11 border-border">
+                        <SelectValue placeholder="Select type" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="residential">Residential</SelectItem>
+                        <SelectItem value="mailing">Mailing</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+                
+                <div className="space-y-2">
+                  <Label className="text-sm font-medium text-foreground">Street Address</Label>
+                  <Input
+                    type="text"
+                    placeholder="123 Old Street"
+                    value={oldAddress.street}
+                    onChange={(e) => updateOldAddressField('street', e.target.value)}
+                    className="h-11 border-border"
+                    disabled={isSubmitted}
+                  />
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="space-y-2">
+                    <Label className="text-sm font-medium text-foreground">
+                      Apartment / Suite (Optional)
+                    </Label>
+                    <Input
+                      type="text"
+                      placeholder="Apt 1A"
+                      value={oldAddress.apartment}
+                      onChange={(e) => updateOldAddressField('apartment', e.target.value)}
+                      className="h-11 border-border"
+                      disabled={isSubmitted}
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label className="text-sm font-medium text-foreground">City</Label>
+                    <Input
+                      type="text"
+                      placeholder="Previous City"
+                      value={oldAddress.city}
+                      onChange={(e) => updateOldAddressField('city', e.target.value)}
+                      className="h-11 border-border"
+                      disabled={isSubmitted}
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label className="text-sm font-medium text-foreground">ZIP Code</Label>
+                    <Input
+                      type="text"
+                      placeholder="12345"
+                      value={oldAddress.zipCode}
+                      onChange={(e) => updateOldAddressField('zipCode', e.target.value)}
+                      className="h-11 border-border"
+                      disabled={isSubmitted}
+                      maxLength={5}
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <Label className="text-sm font-medium text-foreground">State</Label>
+                  <Select
+                    value={oldAddress.state}
+                    onValueChange={(value) => updateOldAddressField('state', value)}
+                    disabled={isSubmitted}
+                  >
+                    <SelectTrigger className="h-11 border-border">
+                      <SelectValue placeholder="Select state" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {US_STATES.map((state) => (
+                        <SelectItem key={state} value={state}>
+                          {state}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </div>
               </div>
             </div>
