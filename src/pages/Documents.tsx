@@ -136,12 +136,12 @@ const Documents = () => {
                 <div className="w-2 h-2 bg-success rounded-full"></div>
                 <span>Secure</span>
               </div>
-              <div className="flex items-center gap-2">
+              <a href="/account" className="flex items-center gap-2 hover:text-foreground">
                 <div className="w-8 h-8 bg-muted rounded-full flex items-center justify-center">
                   <span className="text-xs font-medium">M</span>
                 </div>
                 <span className="text-sm text-muted-foreground">morgan.acaido@gmail.com</span>
-              </div>
+              </a>
             </div>
           </div>
         </div>
