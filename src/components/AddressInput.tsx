@@ -43,7 +43,7 @@ export const AddressInput = ({ onAddressSubmit, isLocked }: AddressInputProps) =
     moveDate: undefined,
     addressType: 'residential'
   });
-  const [newAddresses, setNewAddresses] = useState<AddressData[]>([{
+  const [newAddress, setNewAddress] = useState<AddressData>({
     street: "",
     apartment: "",
     city: "",
@@ -51,7 +51,8 @@ export const AddressInput = ({ onAddressSubmit, isLocked }: AddressInputProps) =
     zipCode: "",
     moveDate: undefined,
     addressType: 'residential'
-  }]);
+  });
+  const [additionalAddresses, setAdditionalAddresses] = useState<AddressData[]>([]);
   const [fullAddress, setFullAddress] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
 
@@ -59,24 +60,26 @@ export const AddressInput = ({ onAddressSubmit, isLocked }: AddressInputProps) =
     setOldAddress(prev => ({ ...prev, [field]: value }));
   };
 
-  const updateNewAddressField = (index: number, field: keyof AddressData, value: string | Date | undefined) => {
-    setNewAddresses(prev => 
-      prev.map((addr, i) => i === index ? { ...addr, [field]: value } : addr)
-    );
+  const updateNewAddressField = (field: keyof AddressData, value: string | Date | undefined) => {
+    setNewAddress(prev => ({ ...prev, [field]: value }));
     
-    // Update full address string for the first new address
-    if (index === 0) {
-      const newAddressData = { ...newAddresses[0], [field]: value };
-      const { street, apartment, city, state, zipCode } = newAddressData;
-      if (street && city && state && zipCode) {
-        const apt = apartment ? `, ${apartment}` : '';
-        setFullAddress(`${street}${apt}, ${city}, ${state} ${zipCode}`);
-      }
+    // Update full address string
+    const newAddressData = { ...newAddress, [field]: value };
+    const { street, apartment, city, state, zipCode } = newAddressData;
+    if (street && city && state && zipCode) {
+      const apt = apartment ? `, ${apartment}` : '';
+      setFullAddress(`${street}${apt}, ${city}, ${state} ${zipCode}`);
     }
   };
 
-  const addNewAddress = () => {
-    setNewAddresses(prev => [...prev, {
+  const updateAdditionalAddressField = (index: number, field: keyof AddressData, value: string | Date | undefined) => {
+    setAdditionalAddresses(prev => 
+      prev.map((addr, i) => i === index ? { ...addr, [field]: value } : addr)
+    );
+  };
+
+  const addAdditionalAddress = () => {
+    setAdditionalAddresses(prev => [...prev, {
       street: "",
       apartment: "",
       city: "",
@@ -87,19 +90,16 @@ export const AddressInput = ({ onAddressSubmit, isLocked }: AddressInputProps) =
     }]);
   };
 
-  const removeAddress = (index: number) => {
-    if (newAddresses.length > 1) {
-      setNewAddresses(prev => prev.filter((_, i) => i !== index));
-    }
+  const removeAdditionalAddress = (index: number) => {
+    setAdditionalAddresses(prev => prev.filter((_, i) => i !== index));
   };
 
   const isFormValid = () => {
-    const firstAddress = newAddresses[0];
-    return firstAddress.street.trim() && 
-           firstAddress.city.trim() && 
-           firstAddress.state && 
-           firstAddress.zipCode.trim() &&
-           firstAddress.moveDate;
+    return newAddress.street.trim() && 
+           newAddress.city.trim() && 
+           newAddress.state && 
+           newAddress.zipCode.trim() &&
+           newAddress.moveDate;
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -244,166 +244,293 @@ export const AddressInput = ({ onAddressSubmit, isLocked }: AddressInputProps) =
               </div>
             </div>
 
-            {/* New Address Section */}
+            {/* New Address Section (Main Form) */}
             <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <h3 className="text-lg font-medium text-foreground border-b border-border pb-2 flex-1">
-                  New Address{newAddresses.length > 1 ? 'es' : ''}
-                </h3>
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  onClick={addNewAddress}
-                  className="ml-4"
-                  disabled={isSubmitted}
-                >
-                  <Plus className="h-4 w-4 mr-2" />
-                  Add Address
-                </Button>
-              </div>
-
-              {newAddresses.map((address, index) => (
-                <div key={index} className="space-y-4 p-4 bg-background border border-border rounded-lg">
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm font-medium text-muted-foreground">
-                      Address {index + 1}
-                    </span>
-                    {newAddresses.length > 1 && (
-                      <Button
-                        type="button"
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => removeAddress(index)}
-                        className="text-destructive hover:text-destructive"
-                        disabled={isSubmitted}
-                      >
-                        <X className="h-4 w-4" />
-                      </Button>
-                    )}
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label className="text-sm font-medium text-foreground">Address Type</Label>
-                      <Select
-                        value={address.addressType}
-                        onValueChange={(value: 'residential' | 'mailing') => updateNewAddressField(index, 'addressType', value)}
-                        disabled={isSubmitted}
-                      >
-                        <SelectTrigger className="h-11 border-border">
-                          <SelectValue placeholder="Select type" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="residential">Residential</SelectItem>
-                          <SelectItem value="mailing">Mailing</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                  </div>
-
+              <h3 className="text-lg font-medium text-foreground border-b border-border pb-2">
+                New Address
+              </h3>
+              <div className="space-y-4 p-4 bg-primary/5 border border-primary/20 rounded-lg">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label className="text-sm font-medium text-foreground">Street Address</Label>
+                    <Label className="text-sm font-medium text-foreground">Address Type</Label>
+                    <Select
+                      value={newAddress.addressType}
+                      onValueChange={(value: 'residential' | 'mailing') => updateNewAddressField('addressType', value)}
+                      disabled={isSubmitted}
+                    >
+                      <SelectTrigger className="h-11 border-border">
+                        <SelectValue placeholder="Select type" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="residential">Residential</SelectItem>
+                        <SelectItem value="mailing">Mailing</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <Label className="text-sm font-medium text-foreground">Street Address</Label>
+                  <Input
+                    type="text"
+                    placeholder="123 Main Street"
+                    value={newAddress.street}
+                    onChange={(e) => updateNewAddressField('street', e.target.value)}
+                    className="h-11 border-border"
+                    disabled={isSubmitted}
+                  />
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="space-y-2">
+                    <Label className="text-sm font-medium text-foreground">
+                      Apartment / Suite (Optional)
+                    </Label>
                     <Input
                       type="text"
-                      placeholder="123 Main Street"
-                      value={address.street}
-                      onChange={(e) => updateNewAddressField(index, 'street', e.target.value)}
+                      placeholder="Apt 4B"
+                      value={newAddress.apartment}
+                      onChange={(e) => updateNewAddressField('apartment', e.target.value)}
                       className="h-11 border-border"
                       disabled={isSubmitted}
                     />
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div className="space-y-2">
-                      <Label className="text-sm font-medium text-foreground">
-                        Apartment / Suite (Optional)
-                      </Label>
-                      <Input
-                        type="text"
-                        placeholder="Apt 4B"
-                        value={address.apartment}
-                        onChange={(e) => updateNewAddressField(index, 'apartment', e.target.value)}
-                        className="h-11 border-border"
-                        disabled={isSubmitted}
-                      />
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label className="text-sm font-medium text-foreground">City</Label>
-                      <Input
-                        type="text"
-                        placeholder="San Francisco"
-                        value={address.city}
-                        onChange={(e) => updateNewAddressField(index, 'city', e.target.value)}
-                        className="h-11 border-border"
-                        disabled={isSubmitted}
-                      />
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label className="text-sm font-medium text-foreground">ZIP Code</Label>
-                      <Input
-                        type="text"
-                        placeholder="94105"
-                        value={address.zipCode}
-                        onChange={(e) => updateNewAddressField(index, 'zipCode', e.target.value)}
-                        className="h-11 border-border"
-                        disabled={isSubmitted}
-                        maxLength={5}
-                      />
-                    </div>
-                  </div>
-
                   <div className="space-y-2">
-                    <Label className="text-sm font-medium text-foreground">State</Label>
-                    <Select
-                      value={address.state}
-                      onValueChange={(value) => updateNewAddressField(index, 'state', value)}
+                    <Label className="text-sm font-medium text-foreground">City</Label>
+                    <Input
+                      type="text"
+                      placeholder="San Francisco"
+                      value={newAddress.city}
+                      onChange={(e) => updateNewAddressField('city', e.target.value)}
+                      className="h-11 border-border"
                       disabled={isSubmitted}
-                    >
-                      <SelectTrigger className="h-11 border-border">
-                        <SelectValue placeholder="Select state" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {US_STATES.map((state) => (
-                          <SelectItem key={state} value={state}>
-                            {state}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
+                    />
                   </div>
 
                   <div className="space-y-2">
-                    <Label className="text-sm font-medium text-foreground">Move Date</Label>
-                    <Popover>
-                      <PopoverTrigger asChild>
-                        <Button
-                          variant="outline"
-                          className={cn(
-                            "h-11 w-full justify-start text-left font-normal border-border",
-                            !address.moveDate && "text-muted-foreground"
-                          )}
-                          disabled={isSubmitted}
-                        >
-                          <CalendarIcon className="mr-2 h-4 w-4" />
-                          {address.moveDate ? format(address.moveDate, "PPP") : <span>mm/dd/yyyy</span>}
-                        </Button>
-                      </PopoverTrigger>
-                      <PopoverContent className="w-auto p-0" align="start">
-                        <Calendar
-                          mode="single"
-                          selected={address.moveDate}
-                          onSelect={(date) => updateNewAddressField(index, 'moveDate', date)}
-                          initialFocus
-                          className="p-3 pointer-events-auto"
-                        />
-                      </PopoverContent>
-                    </Popover>
+                    <Label className="text-sm font-medium text-foreground">ZIP Code</Label>
+                    <Input
+                      type="text"
+                      placeholder="94105"
+                      value={newAddress.zipCode}
+                      onChange={(e) => updateNewAddressField('zipCode', e.target.value)}
+                      className="h-11 border-border"
+                      disabled={isSubmitted}
+                      maxLength={5}
+                    />
                   </div>
                 </div>
-              ))}
+
+                <div className="space-y-2">
+                  <Label className="text-sm font-medium text-foreground">State</Label>
+                  <Select
+                    value={newAddress.state}
+                    onValueChange={(value) => updateNewAddressField('state', value)}
+                    disabled={isSubmitted}
+                  >
+                    <SelectTrigger className="h-11 border-border">
+                      <SelectValue placeholder="Select state" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {US_STATES.map((state) => (
+                        <SelectItem key={state} value={state}>
+                          {state}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div className="space-y-2">
+                  <Label className="text-sm font-medium text-foreground">Move Date</Label>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant="outline"
+                        className={cn(
+                          "h-11 w-full justify-start text-left font-normal border-border",
+                          !newAddress.moveDate && "text-muted-foreground"
+                        )}
+                        disabled={isSubmitted}
+                      >
+                        <CalendarIcon className="mr-2 h-4 w-4" />
+                        {newAddress.moveDate ? format(newAddress.moveDate, "PPP") : <span>mm/dd/yyyy</span>}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0" align="start">
+                      <Calendar
+                        mode="single"
+                        selected={newAddress.moveDate}
+                        onSelect={(date) => updateNewAddressField('moveDate', date)}
+                        initialFocus
+                        className="p-3 pointer-events-auto"
+                      />
+                    </PopoverContent>
+                  </Popover>
+                </div>
+              </div>
+            </div>
+
+            {/* Additional Addresses Section */}
+            {additionalAddresses.length > 0 && (
+              <div className="space-y-4">
+                <h3 className="text-lg font-medium text-foreground border-b border-border pb-2">
+                  Additional Addresses
+                </h3>
+                {additionalAddresses.map((address, index) => (
+                  <div key={index} className="space-y-4 p-4 bg-background border border-border rounded-lg">
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm font-medium text-muted-foreground">
+                        Additional Address {index + 1}
+                      </span>
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => removeAdditionalAddress(index)}
+                        className="text-destructive hover:text-destructive"
+                        disabled={isSubmitted}
+                      >
+                        <X className="h-4 w-4" />
+                      </Button>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <Label className="text-sm font-medium text-foreground">Address Type</Label>
+                        <Select
+                          value={address.addressType}
+                          onValueChange={(value: 'residential' | 'mailing') => updateAdditionalAddressField(index, 'addressType', value)}
+                          disabled={isSubmitted}
+                        >
+                          <SelectTrigger className="h-11 border-border">
+                            <SelectValue placeholder="Select type" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="residential">Residential</SelectItem>
+                            <SelectItem value="mailing">Mailing</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label className="text-sm font-medium text-foreground">Street Address</Label>
+                      <Input
+                        type="text"
+                        placeholder="123 Main Street"
+                        value={address.street}
+                        onChange={(e) => updateAdditionalAddressField(index, 'street', e.target.value)}
+                        className="h-11 border-border"
+                        disabled={isSubmitted}
+                      />
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      <div className="space-y-2">
+                        <Label className="text-sm font-medium text-foreground">
+                          Apartment / Suite (Optional)
+                        </Label>
+                        <Input
+                          type="text"
+                          placeholder="Apt 4B"
+                          value={address.apartment}
+                          onChange={(e) => updateAdditionalAddressField(index, 'apartment', e.target.value)}
+                          className="h-11 border-border"
+                          disabled={isSubmitted}
+                        />
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label className="text-sm font-medium text-foreground">City</Label>
+                        <Input
+                          type="text"
+                          placeholder="San Francisco"
+                          value={address.city}
+                          onChange={(e) => updateAdditionalAddressField(index, 'city', e.target.value)}
+                          className="h-11 border-border"
+                          disabled={isSubmitted}
+                        />
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label className="text-sm font-medium text-foreground">ZIP Code</Label>
+                        <Input
+                          type="text"
+                          placeholder="94105"
+                          value={address.zipCode}
+                          onChange={(e) => updateAdditionalAddressField(index, 'zipCode', e.target.value)}
+                          className="h-11 border-border"
+                          disabled={isSubmitted}
+                          maxLength={5}
+                        />
+                      </div>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label className="text-sm font-medium text-foreground">State</Label>
+                      <Select
+                        value={address.state}
+                        onValueChange={(value) => updateAdditionalAddressField(index, 'state', value)}
+                        disabled={isSubmitted}
+                      >
+                        <SelectTrigger className="h-11 border-border">
+                          <SelectValue placeholder="Select state" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {US_STATES.map((state) => (
+                            <SelectItem key={state} value={state}>
+                              {state}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label className="text-sm font-medium text-foreground">Move Date</Label>
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <Button
+                            variant="outline"
+                            className={cn(
+                              "h-11 w-full justify-start text-left font-normal border-border",
+                              !address.moveDate && "text-muted-foreground"
+                            )}
+                            disabled={isSubmitted}
+                          >
+                            <CalendarIcon className="mr-2 h-4 w-4" />
+                            {address.moveDate ? format(address.moveDate, "PPP") : <span>mm/dd/yyyy</span>}
+                          </Button>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-auto p-0" align="start">
+                          <Calendar
+                            mode="single"
+                            selected={address.moveDate}
+                            onSelect={(date) => updateAdditionalAddressField(index, 'moveDate', date)}
+                            initialFocus
+                            className="p-3 pointer-events-auto"
+                          />
+                        </PopoverContent>
+                      </Popover>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Add Additional Address Button */}
+            <div className="flex justify-center">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={addAdditionalAddress}
+                disabled={isSubmitted}
+              >
+                <Plus className="h-4 w-4 mr-2" />
+                Additional Address
+              </Button>
             </div>
 
             <Button 
