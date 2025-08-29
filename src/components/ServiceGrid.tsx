@@ -16,7 +16,8 @@ import {
   CheckCircle,
   FileText,
   Zap,
-  Package
+  Package,
+  Plus
 } from "lucide-react";
 
 const serviceCategories = [
@@ -85,6 +86,7 @@ interface ServiceGridProps {
 export const ServiceGrid = ({ isAddressLocked }: ServiceGridProps) => {
   const [openCategories, setOpenCategories] = useState<string[]>(['Financial Services']);
   const [searchQuery, setSearchQuery] = useState("");
+  const [categorySearchTerms, setCategorySearchTerms] = useState<{[key: string]: string}>({});
 
   const toggleCategory = (categoryTitle: string) => {
     setOpenCategories(prev => 
@@ -126,6 +128,26 @@ export const ServiceGrid = ({ isAddressLocked }: ServiceGridProps) => {
   const handleFormPackage = (categoryTitle: string) => {
     console.log(`Creating form package for ${categoryTitle}`);
     // Handle creating form package for this category
+  };
+
+  const handleSearchService = (categoryTitle: string, e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter' && categorySearchTerms[categoryTitle]?.trim()) {
+      console.log(`Searching for service: ${categorySearchTerms[categoryTitle]} in ${categoryTitle}`);
+      // Handle adding new service functionality here
+      setCategorySearchTerms(prev => ({ ...prev, [categoryTitle]: "" }));
+    }
+  };
+
+  const handleAddService = (categoryTitle: string) => {
+    if (categorySearchTerms[categoryTitle]?.trim()) {
+      console.log(`Adding service: ${categorySearchTerms[categoryTitle]} to ${categoryTitle}`);
+      // Handle adding new service functionality here
+      setCategorySearchTerms(prev => ({ ...prev, [categoryTitle]: "" }));
+    }
+  };
+
+  const updateCategorySearchTerm = (categoryTitle: string, value: string) => {
+    setCategorySearchTerms(prev => ({ ...prev, [categoryTitle]: value }));
   };
 
   return (
@@ -198,6 +220,30 @@ export const ServiceGrid = ({ isAddressLocked }: ServiceGridProps) => {
                       >
                         <Package className="h-3 w-3 mr-1" />
                         Form Package
+                      </Button>
+                    </div>
+                    
+                    {/* Search field to add new services */}
+                    <div className="flex gap-2 p-3 bg-muted/20 rounded-lg border-dashed border-2 border-border">
+                      <div className="relative flex-1">
+                        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                        <Input
+                          placeholder="Search or add new service..."
+                          value={categorySearchTerms[category.title] || ""}
+                          onChange={(e) => updateCategorySearchTerm(category.title, e.target.value)}
+                          onKeyDown={(e) => handleSearchService(category.title, e)}
+                          className="pl-10"
+                        />
+                      </div>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handleAddService(category.title)}
+                        disabled={!categorySearchTerms[category.title]?.trim()}
+                        className="flex-shrink-0"
+                      >
+                        <Plus className="h-4 w-4 mr-1" />
+                        Add
                       </Button>
                     </div>
                     {category.services.map((service) => (

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
 import { 
   ChevronDown, 
   ChevronRight, 
@@ -11,7 +12,9 @@ import {
   LucideIcon,
   FileText,
   Zap,
-  Package
+  Package,
+  Search,
+  Plus
 } from "lucide-react";
 
 interface Service {
@@ -37,6 +40,7 @@ interface ServiceCardProps {
 export const ServiceCard = ({ category, isEnabled, delay }: ServiceCardProps) => {
   const [isExpanded, setIsExpanded] = useState(true);
   const [completedServices, setCompletedServices] = useState<Set<string>>(new Set());
+  const [searchTerm, setSearchTerm] = useState("");
 
   const handleServiceUpdate = (serviceName: string) => {
     setCompletedServices(prev => {
@@ -68,6 +72,22 @@ export const ServiceCard = ({ category, isEnabled, delay }: ServiceCardProps) =>
   const handleFormPackage = () => {
     console.log(`Creating form package for ${category.title}`);
     // Handle creating form package for this category
+  };
+
+  const handleSearchService = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter' && searchTerm.trim()) {
+      console.log(`Searching for service: ${searchTerm} in ${category.title}`);
+      // Handle adding new service functionality here
+      setSearchTerm("");
+    }
+  };
+
+  const handleAddService = () => {
+    if (searchTerm.trim()) {
+      console.log(`Adding service: ${searchTerm} to ${category.title}`);
+      // Handle adding new service functionality here
+      setSearchTerm("");
+    }
   };
 
   const completedCount = completedServices.size;
@@ -190,6 +210,29 @@ export const ServiceCard = ({ category, isEnabled, delay }: ServiceCardProps) =>
       {isExpanded && isEnabled && (
         <CardContent className="pt-0">
           <div className="space-y-3">
+            {/* Search field to add new services */}
+            <div className="flex gap-2 p-3 bg-muted/20 rounded-lg border-dashed border-2 border-border">
+              <div className="relative flex-1">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Input
+                  placeholder="Search or add new service..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  onKeyDown={handleSearchService}
+                  className="pl-10"
+                />
+              </div>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleAddService}
+                disabled={!searchTerm.trim()}
+                className="flex-shrink-0"
+              >
+                <Plus className="h-4 w-4 mr-1" />
+                Add
+              </Button>
+            </div>
             {category.services.map((service) => {
               const isCompleted = completedServices.has(service.name);
               return (
