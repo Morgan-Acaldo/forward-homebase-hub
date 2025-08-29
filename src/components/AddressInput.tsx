@@ -158,14 +158,35 @@ export const AddressInput = ({ onAddressSubmit, isLocked }: AddressInputProps) =
         </div>
 
         {isLocked ? (
-          <div className="space-y-4">
+          <div className="space-y-6">
             <div className="p-4 bg-success-light rounded-lg border border-success/20">
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-3 mb-4">
                 <Lock className="h-5 w-5 text-success" />
                 <div>
-                  <p className="font-medium text-success-foreground">{fullAddress}</p>
-                  <p className="text-sm text-success/80">Address locked and verified</p>
+                  <p className="font-medium text-black">Address Information Confirmed</p>
+                  <p className="text-sm text-success/80">Both addresses locked and verified</p>
                 </div>
+              </div>
+              
+              <div className="space-y-4">
+                <div>
+                  <h4 className="text-sm font-semibold text-black mb-2">New Address:</h4>
+                  <p className="text-black">{fullAddress}</p>
+                </div>
+                
+                {(oldAddress.street || oldAddress.city || oldAddress.state || oldAddress.zipCode) && (
+                  <div>
+                    <h4 className="text-sm font-semibold text-black mb-2">Previous Address:</h4>
+                    <p className="text-black">
+                      {[
+                        oldAddress.street && oldAddress.apartment ? `${oldAddress.street}, ${oldAddress.apartment}` : oldAddress.street,
+                        oldAddress.city,
+                        oldAddress.state,
+                        oldAddress.zipCode
+                      ].filter(Boolean).join(', ')}
+                    </p>
+                  </div>
+                )}
               </div>
             </div>
           </div>
