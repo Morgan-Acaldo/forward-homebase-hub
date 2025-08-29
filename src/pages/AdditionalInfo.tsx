@@ -13,7 +13,12 @@ import {
   Edit3,
   Save,
   Calendar,
-  MapPin
+  MapPin,
+  Zap,
+  Flame,
+  Phone,
+  Wifi,
+  Droplets
 } from "lucide-react";
 
 interface SectionState {
@@ -26,6 +31,7 @@ const AdditionalInfo = () => {
     personal: { isLocked: true, isEditing: false },
     employment: { isLocked: true, isEditing: false },
     addresses: { isLocked: true, isEditing: false },
+    utilities: { isLocked: true, isEditing: false },
     emergency: { isLocked: true, isEditing: false }
   });
 
@@ -322,6 +328,157 @@ const AdditionalInfo = () => {
                     Save Changes
                   </Button>
                   <Button variant="outline" onClick={() => toggleEdit("addresses")}>Cancel</Button>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+
+          {/* Utilities */}
+          <Card className="border-border">
+            {renderSectionHeader(
+              "utilities", 
+              "Utility Services", 
+              "Gas, electric, phone, internet, and water service information",
+              <Zap className="w-5 h-5" />
+            )}
+            <CardContent className="space-y-8">
+              {/* Gas Service */}
+              <div className="space-y-4">
+                <div className="flex items-center gap-2 text-sm font-medium text-foreground">
+                  <Flame className="w-4 h-4 text-orange-500" />
+                  Gas Service
+                </div>
+                <div className="grid md:grid-cols-2 gap-4 pl-6">
+                  <div className="space-y-2">
+                    <Label htmlFor="gasProvider">Gas Provider</Label>
+                    <Input 
+                      id="gasProvider" 
+                      placeholder="e.g., National Grid, ConEd" 
+                      disabled={sections.utilities.isLocked || !sections.utilities.isEditing}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="gasAccount">Account Number</Label>
+                    <Input 
+                      id="gasAccount" 
+                      placeholder="Enter account number" 
+                      disabled={sections.utilities.isLocked || !sections.utilities.isEditing}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Electric Service */}
+              <div className="space-y-4">
+                <div className="flex items-center gap-2 text-sm font-medium text-foreground">
+                  <Zap className="w-4 h-4 text-yellow-500" />
+                  Electric Service
+                </div>
+                <div className="grid md:grid-cols-2 gap-4 pl-6">
+                  <div className="space-y-2">
+                    <Label htmlFor="electricProvider">Electric Provider</Label>
+                    <Input 
+                      id="electricProvider" 
+                      placeholder="e.g., ConEd, PG&E" 
+                      disabled={sections.utilities.isLocked || !sections.utilities.isEditing}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="electricAccount">Account Number</Label>
+                    <Input 
+                      id="electricAccount" 
+                      placeholder="Enter account number" 
+                      disabled={sections.utilities.isLocked || !sections.utilities.isEditing}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Phone Service */}
+              <div className="space-y-4">
+                <div className="flex items-center gap-2 text-sm font-medium text-foreground">
+                  <Phone className="w-4 h-4 text-green-500" />
+                  Phone Service
+                </div>
+                <div className="grid md:grid-cols-2 gap-4 pl-6">
+                  <div className="space-y-2">
+                    <Label htmlFor="phoneProvider">Phone Provider</Label>
+                    <Input 
+                      id="phoneProvider" 
+                      placeholder="e.g., Verizon, AT&T" 
+                      disabled={sections.utilities.isLocked || !sections.utilities.isEditing}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="phoneAccount">Account Number</Label>
+                    <Input 
+                      id="phoneAccount" 
+                      placeholder="Enter account number" 
+                      disabled={sections.utilities.isLocked || !sections.utilities.isEditing}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Internet Service */}
+              <div className="space-y-4">
+                <div className="flex items-center gap-2 text-sm font-medium text-foreground">
+                  <Wifi className="w-4 h-4 text-blue-500" />
+                  Internet Service
+                </div>
+                <div className="grid md:grid-cols-2 gap-4 pl-6">
+                  <div className="space-y-2">
+                    <Label htmlFor="internetProvider">Internet Provider</Label>
+                    <Input 
+                      id="internetProvider" 
+                      placeholder="e.g., Comcast, Spectrum" 
+                      disabled={sections.utilities.isLocked || !sections.utilities.isEditing}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="internetAccount">Account Number</Label>
+                    <Input 
+                      id="internetAccount" 
+                      placeholder="Enter account number" 
+                      disabled={sections.utilities.isLocked || !sections.utilities.isEditing}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Water Service */}
+              <div className="space-y-4">
+                <div className="flex items-center gap-2 text-sm font-medium text-foreground">
+                  <Droplets className="w-4 h-4 text-blue-600" />
+                  Water Service
+                </div>
+                <div className="grid md:grid-cols-2 gap-4 pl-6">
+                  <div className="space-y-2">
+                    <Label htmlFor="waterProvider">Water Provider</Label>
+                    <Input 
+                      id="waterProvider" 
+                      placeholder="e.g., City Water, Local Municipality" 
+                      disabled={sections.utilities.isLocked || !sections.utilities.isEditing}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="waterAccount">Account Number</Label>
+                    <Input 
+                      id="waterAccount" 
+                      placeholder="Enter account number" 
+                      disabled={sections.utilities.isLocked || !sections.utilities.isEditing}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {sections.utilities.isEditing && (
+                <div className="flex gap-2">
+                  <Button onClick={() => saveSection("utilities")}>
+                    <Save className="w-4 h-4 mr-2" />
+                    Save Changes
+                  </Button>
+                  <Button variant="outline" onClick={() => toggleEdit("utilities")}>Cancel</Button>
                 </div>
               )}
             </CardContent>
