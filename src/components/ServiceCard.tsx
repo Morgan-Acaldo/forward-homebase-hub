@@ -10,7 +10,8 @@ import {
   ArrowRight,
   LucideIcon,
   FileText,
-  Zap
+  Zap,
+  Package
 } from "lucide-react";
 
 interface Service {
@@ -57,6 +58,16 @@ export const ServiceCard = ({ category, isEnabled, delay }: ServiceCardProps) =>
   const handleAutomateClick = (serviceName: string) => {
     console.log(`Setting up automation for ${serviceName}`);
     // Handle automation functionality here
+  };
+
+  const handleAutomateAll = () => {
+    console.log(`Automating all services in ${category.title}`);
+    // Handle automating all services in this category
+  };
+
+  const handleFormPackage = () => {
+    console.log(`Creating form package for ${category.title}`);
+    // Handle creating form package for this category
   };
 
   const completedCount = completedServices.size;
@@ -110,6 +121,35 @@ export const ServiceCard = ({ category, isEnabled, delay }: ServiceCardProps) =>
             <div className="flex-1">
               <h3 className="font-semibold text-foreground text-lg">{category.title}</h3>
               <p className="text-sm text-muted-foreground mt-1">{category.description}</p>
+              
+              {isEnabled && (
+                <div className="mt-4 flex gap-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleAutomateAll();
+                    }}
+                    className="text-xs"
+                  >
+                    <Zap className="h-3 w-3 mr-1" />
+                    Automate All
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleFormPackage();
+                    }}
+                    className="text-xs"
+                  >
+                    <Package className="h-3 w-3 mr-1" />
+                    Form Package
+                  </Button>
+                </div>
+              )}
               
               {isEnabled && (
                 <div className="mt-3">

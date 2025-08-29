@@ -15,7 +15,8 @@ import {
   Clock,
   CheckCircle,
   FileText,
-  Zap
+  Zap,
+  Package
 } from "lucide-react";
 
 const serviceCategories = [
@@ -117,6 +118,16 @@ export const ServiceGrid = ({ isAddressLocked }: ServiceGridProps) => {
     // Handle automation functionality here
   };
 
+  const handleAutomateAll = (categoryTitle: string) => {
+    console.log(`Automating all services in ${categoryTitle}`);
+    // Handle automating all services in this category
+  };
+
+  const handleFormPackage = (categoryTitle: string) => {
+    console.log(`Creating form package for ${categoryTitle}`);
+    // Handle creating form package for this category
+  };
+
   return (
     <div className="w-full space-y-8">
       {/* Search Bar */}
@@ -162,7 +173,33 @@ export const ServiceGrid = ({ isAddressLocked }: ServiceGridProps) => {
                 </CollapsibleTrigger>
                 
                 <CollapsibleContent>
-                  <div className="px-4 pb-4 space-y-3">
+                  <div className="px-4 pt-2 pb-4 space-y-3">
+                    <div className="flex gap-2 pb-3 border-b border-border">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleAutomateAll(category.title);
+                        }}
+                        className="text-xs"
+                      >
+                        <Zap className="h-3 w-3 mr-1" />
+                        Automate All
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleFormPackage(category.title);
+                        }}
+                        className="text-xs"
+                      >
+                        <Package className="h-3 w-3 mr-1" />
+                        Form Package
+                      </Button>
+                    </div>
                     {category.services.map((service) => (
                        <div key={service.name} className="flex items-center justify-between py-2 px-3 rounded-md hover:bg-muted/50">
                          <div className="flex items-center gap-3">
