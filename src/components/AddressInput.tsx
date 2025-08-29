@@ -8,7 +8,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { Calendar } from "@/components/ui/calendar";
 import { format } from "date-fns";
-import { MapPin, Lock, CheckCircle, CalendarIcon, Plus, X, ChevronDown, ChevronUp, Check } from "lucide-react";
+import { MapPin, Lock, CheckCircle, CalendarIcon, Plus, X, ChevronDown, ChevronUp, Check, Unlock } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface AddressData {
@@ -137,6 +137,10 @@ export const AddressInput = ({ onAddressSubmit, isLocked }: AddressInputProps) =
     }
   };
 
+  const handleUnlock = () => {
+    setIsSubmitted(false);
+  };
+
   return (
     <Card className="w-full max-w-4xl mx-auto shadow-sm border bg-card">
       <CardContent className="p-8">
@@ -160,12 +164,23 @@ export const AddressInput = ({ onAddressSubmit, isLocked }: AddressInputProps) =
         {isLocked ? (
           <div className="space-y-6">
             <div className="p-4 bg-success-light rounded-lg border border-success/20">
-              <div className="flex items-center gap-3 mb-4">
-                <Lock className="h-5 w-5 text-success" />
-                <div>
-                  <p className="font-medium text-black">Address Information Confirmed</p>
-                  <p className="text-sm text-success/80">Both addresses locked and verified</p>
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-3">
+                  <Lock className="h-5 w-5 text-success" />
+                  <div>
+                    <p className="font-medium text-black">Address Information Confirmed</p>
+                    <p className="text-sm text-success/80">Both addresses locked and verified</p>
+                  </div>
                 </div>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleUnlock}
+                  className="flex items-center gap-2"
+                >
+                  <Unlock className="h-4 w-4" />
+                  Unlock to Edit
+                </Button>
               </div>
               
               <div className="space-y-4">
