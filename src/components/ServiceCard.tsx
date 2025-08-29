@@ -8,7 +8,9 @@ import {
   CheckCircle, 
   Clock, 
   ArrowRight,
-  LucideIcon
+  LucideIcon,
+  FileText,
+  Zap
 } from "lucide-react";
 
 interface Service {
@@ -45,6 +47,16 @@ export const ServiceCard = ({ category, isEnabled, delay }: ServiceCardProps) =>
       }
       return newSet;
     });
+  };
+
+  const handleFormClick = (serviceName: string) => {
+    console.log(`Opening form for ${serviceName}`);
+    // Handle form functionality here
+  };
+
+  const handleAutomateClick = (serviceName: string) => {
+    console.log(`Setting up automation for ${serviceName}`);
+    // Handle automation functionality here
   };
 
   const completedCount = completedServices.size;
@@ -153,6 +165,32 @@ export const ServiceCard = ({ category, isEnabled, delay }: ServiceCardProps) =>
                   </div>
                   
                   <div className="flex items-center gap-2">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleFormClick(service.name);
+                      }}
+                      className="text-xs"
+                    >
+                      <FileText className="h-3 w-3 mr-1" />
+                      Form
+                    </Button>
+                    
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleAutomateClick(service.name);
+                      }}
+                      className="text-xs"
+                    >
+                      <Zap className="h-3 w-3 mr-1" />
+                      Automate
+                    </Button>
+
                     {isCompleted ? (
                       <Badge variant="secondary" className="bg-success-light text-success">
                         <CheckCircle className="h-3 w-3 mr-1" />
