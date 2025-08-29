@@ -18,7 +18,9 @@ import {
   Flame,
   Phone,
   Wifi,
-  Droplets
+  Droplets,
+  Camera,
+  Upload
 } from "lucide-react";
 
 interface SectionState {
@@ -31,9 +33,21 @@ const AdditionalInfo = () => {
     personal: { isLocked: true, isEditing: false },
     employment: { isLocked: true, isEditing: false },
     addresses: { isLocked: true, isEditing: false },
-    utilities: { isLocked: true, isEditing: false },
+    gas: { isLocked: true, isEditing: false },
+    electric: { isLocked: true, isEditing: false },
+    phone: { isLocked: true, isEditing: false },
+    internet: { isLocked: true, isEditing: false },
+    water: { isLocked: true, isEditing: false },
     emergency: { isLocked: true, isEditing: false }
   });
+
+  const handleFileUpload = (sectionId: string, event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      console.log(`Uploading ${sectionId} bill photo:`, file.name);
+      // Here you would typically upload the file to your backend for OCR processing
+    }
+  };
 
   const toggleLock = (sectionId: string) => {
     setSections(prev => ({
@@ -333,152 +347,361 @@ const AdditionalInfo = () => {
             </CardContent>
           </Card>
 
-          {/* Utilities */}
+          {/* Gas Service */}
           <Card className="border-border">
             {renderSectionHeader(
-              "utilities", 
-              "Utility Services", 
-              "Gas, electric, phone, internet, and water service information",
-              <Zap className="w-5 h-5" />
+              "gas", 
+              "Gas Service", 
+              "Gas utility provider and account information",
+              <Flame className="w-5 h-5 text-orange-500" />
             )}
-            <CardContent className="space-y-8">
-              {/* Gas Service */}
-              <div className="space-y-4">
-                <div className="flex items-center gap-2 text-sm font-medium text-foreground">
-                  <Flame className="w-4 h-4 text-orange-500" />
-                  Gas Service
+            <CardContent className="space-y-6">
+              <div className="grid md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="gasProvider">Gas Provider</Label>
+                  <Input 
+                    id="gasProvider" 
+                    placeholder="e.g., National Grid, ConEd" 
+                    disabled={sections.gas.isLocked || !sections.gas.isEditing}
+                  />
                 </div>
-                <div className="grid md:grid-cols-2 gap-4 pl-6">
-                  <div className="space-y-2">
-                    <Label htmlFor="gasProvider">Gas Provider</Label>
-                    <Input 
-                      id="gasProvider" 
-                      placeholder="e.g., National Grid, ConEd" 
-                      disabled={sections.utilities.isLocked || !sections.utilities.isEditing}
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="gasAccount">Account Number</Label>
-                    <Input 
-                      id="gasAccount" 
-                      placeholder="Enter account number" 
-                      disabled={sections.utilities.isLocked || !sections.utilities.isEditing}
-                    />
+                <div className="space-y-2">
+                  <Label htmlFor="gasAccount">Account Number</Label>
+                  <Input 
+                    id="gasAccount" 
+                    placeholder="Enter account number" 
+                    disabled={sections.gas.isLocked || !sections.gas.isEditing}
+                  />
+                </div>
+              </div>
+              <div className="space-y-2">
+                <Label>Upload Gas Bill Photo</Label>
+                <div className="border-2 border-dashed border-border rounded-lg p-4">
+                  <div className="flex flex-col items-center gap-2">
+                    <Camera className="w-8 h-8 text-muted-foreground" />
+                    <p className="text-sm text-muted-foreground text-center">
+                      Upload or take a photo of your gas bill for automatic data extraction
+                    </p>
+                    <label className="cursor-pointer">
+                      <input
+                        type="file"
+                        accept="image/*"
+                        capture="environment"
+                        onChange={(e) => handleFileUpload("gas", e)}
+                        className="hidden"
+                        disabled={sections.gas.isLocked}
+                      />
+                      <Button 
+                        type="button" 
+                        variant="outline" 
+                        size="sm"
+                        disabled={sections.gas.isLocked}
+                        asChild
+                      >
+                        <span>
+                          <Upload className="w-4 h-4 mr-2" />
+                          Choose Photo
+                        </span>
+                      </Button>
+                    </label>
                   </div>
                 </div>
               </div>
-
-              {/* Electric Service */}
-              <div className="space-y-4">
-                <div className="flex items-center gap-2 text-sm font-medium text-foreground">
-                  <Zap className="w-4 h-4 text-yellow-500" />
-                  Electric Service
-                </div>
-                <div className="grid md:grid-cols-2 gap-4 pl-6">
-                  <div className="space-y-2">
-                    <Label htmlFor="electricProvider">Electric Provider</Label>
-                    <Input 
-                      id="electricProvider" 
-                      placeholder="e.g., ConEd, PG&E" 
-                      disabled={sections.utilities.isLocked || !sections.utilities.isEditing}
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="electricAccount">Account Number</Label>
-                    <Input 
-                      id="electricAccount" 
-                      placeholder="Enter account number" 
-                      disabled={sections.utilities.isLocked || !sections.utilities.isEditing}
-                    />
-                  </div>
-                </div>
-              </div>
-
-              {/* Phone Service */}
-              <div className="space-y-4">
-                <div className="flex items-center gap-2 text-sm font-medium text-foreground">
-                  <Phone className="w-4 h-4 text-green-500" />
-                  Phone Service
-                </div>
-                <div className="grid md:grid-cols-2 gap-4 pl-6">
-                  <div className="space-y-2">
-                    <Label htmlFor="phoneProvider">Phone Provider</Label>
-                    <Input 
-                      id="phoneProvider" 
-                      placeholder="e.g., Verizon, AT&T" 
-                      disabled={sections.utilities.isLocked || !sections.utilities.isEditing}
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="phoneAccount">Account Number</Label>
-                    <Input 
-                      id="phoneAccount" 
-                      placeholder="Enter account number" 
-                      disabled={sections.utilities.isLocked || !sections.utilities.isEditing}
-                    />
-                  </div>
-                </div>
-              </div>
-
-              {/* Internet Service */}
-              <div className="space-y-4">
-                <div className="flex items-center gap-2 text-sm font-medium text-foreground">
-                  <Wifi className="w-4 h-4 text-blue-500" />
-                  Internet Service
-                </div>
-                <div className="grid md:grid-cols-2 gap-4 pl-6">
-                  <div className="space-y-2">
-                    <Label htmlFor="internetProvider">Internet Provider</Label>
-                    <Input 
-                      id="internetProvider" 
-                      placeholder="e.g., Comcast, Spectrum" 
-                      disabled={sections.utilities.isLocked || !sections.utilities.isEditing}
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="internetAccount">Account Number</Label>
-                    <Input 
-                      id="internetAccount" 
-                      placeholder="Enter account number" 
-                      disabled={sections.utilities.isLocked || !sections.utilities.isEditing}
-                    />
-                  </div>
-                </div>
-              </div>
-
-              {/* Water Service */}
-              <div className="space-y-4">
-                <div className="flex items-center gap-2 text-sm font-medium text-foreground">
-                  <Droplets className="w-4 h-4 text-blue-600" />
-                  Water Service
-                </div>
-                <div className="grid md:grid-cols-2 gap-4 pl-6">
-                  <div className="space-y-2">
-                    <Label htmlFor="waterProvider">Water Provider</Label>
-                    <Input 
-                      id="waterProvider" 
-                      placeholder="e.g., City Water, Local Municipality" 
-                      disabled={sections.utilities.isLocked || !sections.utilities.isEditing}
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="waterAccount">Account Number</Label>
-                    <Input 
-                      id="waterAccount" 
-                      placeholder="Enter account number" 
-                      disabled={sections.utilities.isLocked || !sections.utilities.isEditing}
-                    />
-                  </div>
-                </div>
-              </div>
-
-              {sections.utilities.isEditing && (
+              {sections.gas.isEditing && (
                 <div className="flex gap-2">
-                  <Button onClick={() => saveSection("utilities")}>
+                  <Button onClick={() => saveSection("gas")}>
                     <Save className="w-4 h-4 mr-2" />
                     Save Changes
                   </Button>
-                  <Button variant="outline" onClick={() => toggleEdit("utilities")}>Cancel</Button>
+                  <Button variant="outline" onClick={() => toggleEdit("gas")}>Cancel</Button>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+
+          {/* Electric Service */}
+          <Card className="border-border">
+            {renderSectionHeader(
+              "electric", 
+              "Electric Service", 
+              "Electric utility provider and account information",
+              <Zap className="w-5 h-5 text-yellow-500" />
+            )}
+            <CardContent className="space-y-6">
+              <div className="grid md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="electricProvider">Electric Provider</Label>
+                  <Input 
+                    id="electricProvider" 
+                    placeholder="e.g., ConEd, PG&E" 
+                    disabled={sections.electric.isLocked || !sections.electric.isEditing}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="electricAccount">Account Number</Label>
+                  <Input 
+                    id="electricAccount" 
+                    placeholder="Enter account number" 
+                    disabled={sections.electric.isLocked || !sections.electric.isEditing}
+                  />
+                </div>
+              </div>
+              <div className="space-y-2">
+                <Label>Upload Electric Bill Photo</Label>
+                <div className="border-2 border-dashed border-border rounded-lg p-4">
+                  <div className="flex flex-col items-center gap-2">
+                    <Camera className="w-8 h-8 text-muted-foreground" />
+                    <p className="text-sm text-muted-foreground text-center">
+                      Upload or take a photo of your electric bill for automatic data extraction
+                    </p>
+                    <label className="cursor-pointer">
+                      <input
+                        type="file"
+                        accept="image/*"
+                        capture="environment"
+                        onChange={(e) => handleFileUpload("electric", e)}
+                        className="hidden"
+                        disabled={sections.electric.isLocked}
+                      />
+                      <Button 
+                        type="button" 
+                        variant="outline" 
+                        size="sm"
+                        disabled={sections.electric.isLocked}
+                        asChild
+                      >
+                        <span>
+                          <Upload className="w-4 h-4 mr-2" />
+                          Choose Photo
+                        </span>
+                      </Button>
+                    </label>
+                  </div>
+                </div>
+              </div>
+              {sections.electric.isEditing && (
+                <div className="flex gap-2">
+                  <Button onClick={() => saveSection("electric")}>
+                    <Save className="w-4 h-4 mr-2" />
+                    Save Changes
+                  </Button>
+                  <Button variant="outline" onClick={() => toggleEdit("electric")}>Cancel</Button>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+
+          {/* Phone Service */}
+          <Card className="border-border">
+            {renderSectionHeader(
+              "phone", 
+              "Phone Service", 
+              "Phone service provider and account information",
+              <Phone className="w-5 h-5 text-green-500" />
+            )}
+            <CardContent className="space-y-6">
+              <div className="grid md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="phoneProvider">Phone Provider</Label>
+                  <Input 
+                    id="phoneProvider" 
+                    placeholder="e.g., Verizon, AT&T" 
+                    disabled={sections.phone.isLocked || !sections.phone.isEditing}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="phoneAccount">Account Number</Label>
+                  <Input 
+                    id="phoneAccount" 
+                    placeholder="Enter account number" 
+                    disabled={sections.phone.isLocked || !sections.phone.isEditing}
+                  />
+                </div>
+              </div>
+              <div className="space-y-2">
+                <Label>Upload Phone Bill Photo</Label>
+                <div className="border-2 border-dashed border-border rounded-lg p-4">
+                  <div className="flex flex-col items-center gap-2">
+                    <Camera className="w-8 h-8 text-muted-foreground" />
+                    <p className="text-sm text-muted-foreground text-center">
+                      Upload or take a photo of your phone bill for automatic data extraction
+                    </p>
+                    <label className="cursor-pointer">
+                      <input
+                        type="file"
+                        accept="image/*"
+                        capture="environment"
+                        onChange={(e) => handleFileUpload("phone", e)}
+                        className="hidden"
+                        disabled={sections.phone.isLocked}
+                      />
+                      <Button 
+                        type="button" 
+                        variant="outline" 
+                        size="sm"
+                        disabled={sections.phone.isLocked}
+                        asChild
+                      >
+                        <span>
+                          <Upload className="w-4 h-4 mr-2" />
+                          Choose Photo
+                        </span>
+                      </Button>
+                    </label>
+                  </div>
+                </div>
+              </div>
+              {sections.phone.isEditing && (
+                <div className="flex gap-2">
+                  <Button onClick={() => saveSection("phone")}>
+                    <Save className="w-4 h-4 mr-2" />
+                    Save Changes
+                  </Button>
+                  <Button variant="outline" onClick={() => toggleEdit("phone")}>Cancel</Button>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+
+          {/* Internet Service */}
+          <Card className="border-border">
+            {renderSectionHeader(
+              "internet", 
+              "Internet Service", 
+              "Internet service provider and account information",
+              <Wifi className="w-5 h-5 text-blue-500" />
+            )}
+            <CardContent className="space-y-6">
+              <div className="grid md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="internetProvider">Internet Provider</Label>
+                  <Input 
+                    id="internetProvider" 
+                    placeholder="e.g., Comcast, Spectrum" 
+                    disabled={sections.internet.isLocked || !sections.internet.isEditing}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="internetAccount">Account Number</Label>
+                  <Input 
+                    id="internetAccount" 
+                    placeholder="Enter account number" 
+                    disabled={sections.internet.isLocked || !sections.internet.isEditing}
+                  />
+                </div>
+              </div>
+              <div className="space-y-2">
+                <Label>Upload Internet Bill Photo</Label>
+                <div className="border-2 border-dashed border-border rounded-lg p-4">
+                  <div className="flex flex-col items-center gap-2">
+                    <Camera className="w-8 h-8 text-muted-foreground" />
+                    <p className="text-sm text-muted-foreground text-center">
+                      Upload or take a photo of your internet bill for automatic data extraction
+                    </p>
+                    <label className="cursor-pointer">
+                      <input
+                        type="file"
+                        accept="image/*"
+                        capture="environment"
+                        onChange={(e) => handleFileUpload("internet", e)}
+                        className="hidden"
+                        disabled={sections.internet.isLocked}
+                      />
+                      <Button 
+                        type="button" 
+                        variant="outline" 
+                        size="sm"
+                        disabled={sections.internet.isLocked}
+                        asChild
+                      >
+                        <span>
+                          <Upload className="w-4 h-4 mr-2" />
+                          Choose Photo
+                        </span>
+                      </Button>
+                    </label>
+                  </div>
+                </div>
+              </div>
+              {sections.internet.isEditing && (
+                <div className="flex gap-2">
+                  <Button onClick={() => saveSection("internet")}>
+                    <Save className="w-4 h-4 mr-2" />
+                    Save Changes
+                  </Button>
+                  <Button variant="outline" onClick={() => toggleEdit("internet")}>Cancel</Button>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+
+          {/* Water Service */}
+          <Card className="border-border">
+            {renderSectionHeader(
+              "water", 
+              "Water Service", 
+              "Water utility provider and account information",
+              <Droplets className="w-5 h-5 text-blue-600" />
+            )}
+            <CardContent className="space-y-6">
+              <div className="grid md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="waterProvider">Water Provider</Label>
+                  <Input 
+                    id="waterProvider" 
+                    placeholder="e.g., City Water, Local Municipality" 
+                    disabled={sections.water.isLocked || !sections.water.isEditing}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="waterAccount">Account Number</Label>
+                  <Input 
+                    id="waterAccount" 
+                    placeholder="Enter account number" 
+                    disabled={sections.water.isLocked || !sections.water.isEditing}
+                  />
+                </div>
+              </div>
+              <div className="space-y-2">
+                <Label>Upload Water Bill Photo</Label>
+                <div className="border-2 border-dashed border-border rounded-lg p-4">
+                  <div className="flex flex-col items-center gap-2">
+                    <Camera className="w-8 h-8 text-muted-foreground" />
+                    <p className="text-sm text-muted-foreground text-center">
+                      Upload or take a photo of your water bill for automatic data extraction
+                    </p>
+                    <label className="cursor-pointer">
+                      <input
+                        type="file"
+                        accept="image/*"
+                        capture="environment"
+                        onChange={(e) => handleFileUpload("water", e)}
+                        className="hidden"
+                        disabled={sections.water.isLocked}
+                      />
+                      <Button 
+                        type="button" 
+                        variant="outline" 
+                        size="sm"
+                        disabled={sections.water.isLocked}
+                        asChild
+                      >
+                        <span>
+                          <Upload className="w-4 h-4 mr-2" />
+                          Choose Photo
+                        </span>
+                      </Button>
+                    </label>
+                  </div>
+                </div>
+              </div>
+              {sections.water.isEditing && (
+                <div className="flex gap-2">
+                  <Button onClick={() => saveSection("water")}>
+                    <Save className="w-4 h-4 mr-2" />
+                    Save Changes
+                  </Button>
+                  <Button variant="outline" onClick={() => toggleEdit("water")}>Cancel</Button>
                 </div>
               )}
             </CardContent>
