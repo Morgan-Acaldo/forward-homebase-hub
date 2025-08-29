@@ -26,7 +26,7 @@ const Services = () => {
       id: "tier1",
       name: "Form Generation",
       tier: "Tier 1",
-      price: "$9 one time",
+      price: "$9 per move",
       description: "Generate address change forms and letters for manual submission",
       icon: <FileText className="w-8 h-8" />,
       color: "bg-blue-500",
@@ -46,7 +46,7 @@ const Services = () => {
       id: "tier2", 
       name: "Guided Automation",
       tier: "Tier 2",
-      price: "$19 one time",
+      price: "$19 per move",
       description: "Hybrid automation with guided assistance for complex services",
       icon: <Zap className="w-8 h-8" />,
       color: "bg-primary",
@@ -211,7 +211,7 @@ const Services = () => {
                   variant={tier.popular ? "default" : "outline"}
                   size="lg"
                 >
-                  {tier.price.includes("one time") ? "One-Time Purchase" : "Choose Plan"}
+                  {tier.price.includes("per move") ? "One-Time Purchase" : "Choose Plan"}
                   <ArrowRight className="w-4 h-4 ml-2" />
                 </Button>
               </CardContent>
