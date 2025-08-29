@@ -118,6 +118,7 @@ const AdditionalInfo = () => {
                 <a href="/" className="text-sm text-muted-foreground hover:text-foreground">Dashboard</a>
                 <a href="/services" className="text-sm text-muted-foreground hover:text-foreground">Services</a>
                 <a href="/documents" className="text-sm text-muted-foreground hover:text-foreground">Documents</a>
+                <a href="/additional-info" className="text-sm text-foreground font-medium">Additional Info</a>
                 <a href="/support" className="text-sm text-muted-foreground hover:text-foreground">Support</a>
               </nav>
             </div>

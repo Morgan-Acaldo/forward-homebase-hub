@@ -28,12 +28,13 @@ const Dashboard = () => {
                 </div>
                 <h1 className="text-xl font-bold text-foreground">Forward</h1>
               </div>
-              <nav className="hidden md:flex items-center gap-6">
-                <a href="/" className="text-sm font-medium text-foreground border-b-2 border-primary pb-1">Dashboard</a>
-                <a href="/services" className="text-sm text-muted-foreground hover:text-foreground">Services</a>
-                <a href="/documents" className="text-sm text-muted-foreground hover:text-foreground">Documents</a>
-                <a href="/support" className="text-sm text-muted-foreground hover:text-foreground">Support</a>
-              </nav>
+               <nav className="hidden md:flex items-center gap-6">
+                 <a href="/" className="text-sm font-medium text-foreground border-b-2 border-primary pb-1">Dashboard</a>
+                 <a href="/services" className="text-sm text-muted-foreground hover:text-foreground">Services</a>
+                 <a href="/documents" className="text-sm text-muted-foreground hover:text-foreground">Documents</a>
+                 <a href="/additional-info" className="text-sm text-muted-foreground hover:text-foreground">Additional Info</a>
+                 <a href="/support" className="text-sm text-muted-foreground hover:text-foreground">Support</a>
+               </nav>
             </div>
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-2 text-sm text-muted-foreground">
