@@ -8,7 +8,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { Calendar } from "@/components/ui/calendar";
 import { format } from "date-fns";
-import { MapPin, Lock, CheckCircle, CalendarIcon, Plus, X, ChevronDown, ChevronUp } from "lucide-react";
+import { MapPin, Lock, CheckCircle, CalendarIcon, Plus, X, ChevronDown, ChevronUp, Check } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface AddressData {
@@ -106,6 +106,29 @@ export const AddressInput = ({ onAddressSubmit, isLocked }: AddressInputProps) =
            newAddress.moveDate;
   };
 
+  const isNewAddressComplete = () => {
+    return newAddress.street.trim() && 
+           newAddress.city.trim() && 
+           newAddress.state && 
+           newAddress.zipCode.trim() &&
+           newAddress.moveDate;
+  };
+
+  const isPreviousAddressComplete = () => {
+    return oldAddress.street.trim() && 
+           oldAddress.city.trim() && 
+           oldAddress.state && 
+           oldAddress.zipCode.trim();
+  };
+
+  const isAdditionalAddressComplete = (address: AddressData) => {
+    return address.street.trim() && 
+           address.city.trim() && 
+           address.state && 
+           address.zipCode.trim() &&
+           address.moveDate;
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (isFormValid()) {
@@ -152,9 +175,16 @@ export const AddressInput = ({ onAddressSubmit, isLocked }: AddressInputProps) =
             <Collapsible open={isNewAddressOpen} onOpenChange={setIsNewAddressOpen}>
               <CollapsibleTrigger asChild>
                 <Button variant="ghost" className="w-full justify-between p-0 h-auto">
-                  <h3 className="text-lg font-medium text-foreground border-b border-border pb-2 flex-1 text-left">
-                    New Address
-                  </h3>
+                  <div className="flex items-center gap-2 flex-1">
+                    <h3 className="text-lg font-medium text-foreground border-b border-border pb-2 flex-1 text-left">
+                      New Address
+                    </h3>
+                    {!isNewAddressOpen && (
+                      isNewAddressComplete() ? 
+                        <Check className="h-4 w-4 text-green-600" /> : 
+                        <X className="h-4 w-4 text-red-500" />
+                    )}
+                  </div>
                   {isNewAddressOpen ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
                 </Button>
               </CollapsibleTrigger>
@@ -287,9 +317,16 @@ export const AddressInput = ({ onAddressSubmit, isLocked }: AddressInputProps) =
             <Collapsible open={isPreviousAddressOpen} onOpenChange={setIsPreviousAddressOpen}>
               <CollapsibleTrigger asChild>
                 <Button variant="ghost" className="w-full justify-between p-0 h-auto">
-                  <h3 className="text-lg font-medium text-foreground border-b border-border pb-2 flex-1 text-left">
-                    Previous Address
-                  </h3>
+                  <div className="flex items-center gap-2 flex-1">
+                    <h3 className="text-lg font-medium text-foreground border-b border-border pb-2 flex-1 text-left">
+                      Previous Address
+                    </h3>
+                    {!isPreviousAddressOpen && (
+                      isPreviousAddressComplete() ? 
+                        <Check className="h-4 w-4 text-green-600" /> : 
+                        <X className="h-4 w-4 text-red-500" />
+                    )}
+                  </div>
                   {isPreviousAddressOpen ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
                 </Button>
               </CollapsibleTrigger>
@@ -395,9 +432,22 @@ export const AddressInput = ({ onAddressSubmit, isLocked }: AddressInputProps) =
               <Collapsible open={isAdditionalAddressOpen} onOpenChange={setIsAdditionalAddressOpen}>
                 <CollapsibleTrigger asChild>
                   <Button variant="ghost" className="w-full justify-between p-0 h-auto">
-                    <h3 className="text-lg font-medium text-foreground border-b border-border pb-2 flex-1 text-left">
-                      Additional Addresses
-                    </h3>
+                    <div className="flex items-center gap-2 flex-1">
+                      <h3 className="text-lg font-medium text-foreground border-b border-border pb-2 flex-1 text-left">
+                        Additional Addresses
+                      </h3>
+                      {!isAdditionalAddressOpen && additionalAddresses.length > 0 && (
+                        <div className="flex items-center gap-1">
+                          {additionalAddresses.every(addr => isAdditionalAddressComplete(addr)) ? 
+                            <Check className="h-4 w-4 text-green-600" /> : 
+                            <X className="h-4 w-4 text-red-500" />
+                          }
+                          <span className="text-xs text-muted-foreground">
+                            {additionalAddresses.filter(addr => isAdditionalAddressComplete(addr)).length}/{additionalAddresses.length}
+                          </span>
+                        </div>
+                      )}
+                    </div>
                     {isAdditionalAddressOpen ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
                   </Button>
                 </CollapsibleTrigger>
