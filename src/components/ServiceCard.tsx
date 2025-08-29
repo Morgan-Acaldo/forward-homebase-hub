@@ -14,7 +14,8 @@ import {
   Zap,
   Package,
   Search,
-  Plus
+  Plus,
+  X
 } from "lucide-react";
 
 interface Service {
@@ -88,6 +89,11 @@ export const ServiceCard = ({ category, isEnabled, delay }: ServiceCardProps) =>
       // Handle adding new service functionality here
       setSearchTerm("");
     }
+  };
+
+  const handleRemoveService = (serviceName: string) => {
+    console.log(`Removing service: ${serviceName} from ${category.title}`);
+    // Handle removing service functionality here
   };
 
   const completedCount = completedServices.size;
@@ -293,6 +299,18 @@ export const ServiceCard = ({ category, isEnabled, delay }: ServiceCardProps) =>
                         <ArrowRight className="h-3 w-3 ml-1" />
                       </Button>
                     )}
+                    
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleRemoveService(service.name);
+                      }}
+                      className="text-destructive hover:text-destructive hover:bg-destructive/10 p-1"
+                    >
+                      <X className="h-4 w-4" />
+                    </Button>
                   </div>
                 </div>
               );

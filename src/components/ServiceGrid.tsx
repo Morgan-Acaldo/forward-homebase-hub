@@ -17,7 +17,8 @@ import {
   FileText,
   Zap,
   Package,
-  Plus
+  Plus,
+  X
 } from "lucide-react";
 
 const serviceCategories = [
@@ -150,6 +151,11 @@ export const ServiceGrid = ({ isAddressLocked }: ServiceGridProps) => {
     setCategorySearchTerms(prev => ({ ...prev, [categoryTitle]: value }));
   };
 
+  const handleRemoveService = (serviceName: string, categoryTitle: string) => {
+    console.log(`Removing service: ${serviceName} from ${categoryTitle}`);
+    // Handle removing service functionality here
+  };
+
   return (
     <div className="w-full space-y-8">
       {/* Search Bar */}
@@ -252,35 +258,47 @@ export const ServiceGrid = ({ isAddressLocked }: ServiceGridProps) => {
                            {getStatusIcon(service.status)}
                            <span className="text-sm font-medium text-foreground">{service.name}</span>
                          </div>
-                         <div className="flex items-center gap-2">
-                           <Button
-                             variant="outline"
-                             size="sm"
-                             onClick={(e) => {
-                               e.stopPropagation();
-                               handleFormClick(service.name);
-                             }}
-                             className="text-xs px-2 py-1"
-                           >
-                             <FileText className="h-3 w-3 mr-1" />
-                             Form
-                           </Button>
-                           
-                           <Button
-                             variant="outline"
-                             size="sm"
-                             onClick={(e) => {
-                               e.stopPropagation();
-                               handleAutomateClick(service.name);
-                             }}
-                             className="text-xs px-2 py-1"
-                           >
-                             <Zap className="h-3 w-3 mr-1" />
-                             Automate
-                           </Button>
-                           
-                           {getStatusBadge(service.status)}
-                         </div>
+                          <div className="flex items-center gap-2">
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleFormClick(service.name);
+                              }}
+                              className="text-xs px-2 py-1"
+                            >
+                              <FileText className="h-3 w-3 mr-1" />
+                              Form
+                            </Button>
+                            
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleAutomateClick(service.name);
+                              }}
+                              className="text-xs px-2 py-1"
+                            >
+                              <Zap className="h-3 w-3 mr-1" />
+                              Automate
+                            </Button>
+                            
+                            {getStatusBadge(service.status)}
+                            
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleRemoveService(service.name, category.title);
+                              }}
+                              className="text-destructive hover:text-destructive hover:bg-destructive/10 p-1"
+                            >
+                              <X className="h-4 w-4" />
+                            </Button>
+                          </div>
                        </div>
                     ))}
                   </div>
