@@ -34,7 +34,7 @@ interface ServiceCardProps {
 }
 
 export const ServiceCard = ({ category, isEnabled, delay }: ServiceCardProps) => {
-  const [isExpanded, setIsExpanded] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(true);
   const [completedServices, setCompletedServices] = useState<Set<string>>(new Set());
 
   const handleServiceUpdate = (serviceName: string) => {
