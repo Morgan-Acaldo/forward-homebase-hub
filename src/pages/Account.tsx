@@ -17,7 +17,10 @@ import {
   Key,
   Download,
   Trash2,
-  Edit3
+  Edit3,
+  FileText,
+  Calendar,
+  Building
 } from "lucide-react";
 
 const Account = () => {
@@ -131,6 +134,118 @@ const Account = () => {
                   defaultValue="123 Main St, San Francisco, CA 94105" 
                   disabled={!isEditing}
                 />
+              </div>
+              {isEditing && (
+                <div className="flex gap-2">
+                  <Button>Save Changes</Button>
+                  <Button variant="outline" onClick={() => setIsEditing(false)}>Cancel</Button>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+
+          {/* Additional Form Information */}
+          <Card className="border-border">
+            <CardHeader className="flex flex-row items-center justify-between">
+              <div>
+                <CardTitle className="flex items-center gap-2">
+                  <FileText className="w-5 h-5" />
+                  Additional Form Information
+                </CardTitle>
+                <CardDescription>Information commonly needed for address change forms</CardDescription>
+              </div>
+              <Button 
+                variant="outline" 
+                size="sm"
+                onClick={() => setIsEditing(!isEditing)}
+              >
+                <Edit3 className="w-4 h-4 mr-2" />
+                {isEditing ? "Cancel" : "Edit"}
+              </Button>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div className="grid md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="ssn">Social Security Number (Last 4 digits)</Label>
+                  <Input 
+                    id="ssn" 
+                    placeholder="****" 
+                    maxLength={4}
+                    disabled={!isEditing}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="dob">Date of Birth</Label>
+                  <Input 
+                    id="dob" 
+                    type="date" 
+                    defaultValue="1990-05-15"
+                    disabled={!isEditing}
+                  />
+                </div>
+              </div>
+              <div className="grid md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="license">Driver's License Number</Label>
+                  <Input 
+                    id="license" 
+                    placeholder="Enter license number" 
+                    disabled={!isEditing}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="licenseState">License State</Label>
+                  <Input 
+                    id="licenseState" 
+                    placeholder="e.g., CA" 
+                    disabled={!isEditing}
+                  />
+                </div>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="previousAddress">Previous Address</Label>
+                <Input 
+                  id="previousAddress" 
+                  placeholder="Enter your previous address" 
+                  disabled={!isEditing}
+                />
+              </div>
+              <div className="grid md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="employer">Employer Name</Label>
+                  <Input 
+                    id="employer" 
+                    placeholder="Enter employer name" 
+                    disabled={!isEditing}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="workAddress">Work Address</Label>
+                  <Input 
+                    id="workAddress" 
+                    placeholder="Enter work address" 
+                    disabled={!isEditing}
+                  />
+                </div>
+              </div>
+              <div className="grid md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="emergencyContact">Emergency Contact Name</Label>
+                  <Input 
+                    id="emergencyContact" 
+                    placeholder="Enter emergency contact" 
+                    disabled={!isEditing}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="emergencyPhone">Emergency Contact Phone</Label>
+                  <Input 
+                    id="emergencyPhone" 
+                    type="tel" 
+                    placeholder="Enter phone number" 
+                    disabled={!isEditing}
+                  />
+                </div>
               </div>
               {isEditing && (
                 <div className="flex gap-2">
